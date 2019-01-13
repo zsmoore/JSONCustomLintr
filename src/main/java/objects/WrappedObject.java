@@ -2,12 +2,12 @@ package objects;
 
 public interface WrappedObject {
 
-    public String getOriginatingKey();
+    String getOriginatingKey();
 
-    public WrappedObject getParentObject();
+    WrappedObject getParentObject();
 
-    public void parseAndReplaceWithWrappers();
+    void parseAndReplaceWithWrappers();
 
-    public boolean isPrimitive();
+    boolean isPrimitive();
 
 }

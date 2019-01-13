@@ -1,10 +1,10 @@
 package objects;
 
-public class WrappedObjectHelper {
+class WrappedObjectHelper {
 
     private WrappedObjectHelper(){}
 
-    public static WrappedObject getWrappedObject(String originatingKey,
+    static WrappedObject getWrappedObject(String originatingKey,
                                                  Object originalObject,
                                                  WrappedObject parentObject) {
         WrappedObject wrappedObject;
@@ -22,10 +22,9 @@ public class WrappedObjectHelper {
             return (WrappedObject) originalObject;
         } else {
             wrappedObject = new WrappedPrimitive(originatingKey,
-                                                 parentObject,
-                                                 originalObject);
+                                                   parentObject,
+                                                   originalObject);
         }
-        wrappedObject.parseAndReplaceWithWrappers();
         return wrappedObject;
     }
 }

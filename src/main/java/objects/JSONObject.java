@@ -10,7 +10,7 @@ public class JSONObject extends org.json.JSONObject implements WrappedObject {
 
     private final org.json.JSONObject clonedObject;
 
-    public JSONObject(String originatingKey,
+    JSONObject(String originatingKey,
                       WrappedObject parentObject,
                       org.json.JSONObject clone) {
         super(clone, org.json.JSONObject.getNames(clone));
@@ -48,7 +48,7 @@ public class JSONObject extends org.json.JSONObject implements WrappedObject {
 
     @Override
     public Map<String, Object> toMap() {
-        Map<String, Object> results = new HashMap<String, Object>();
+        Map<String, Object> results = new HashMap<>();
         for (Map.Entry<String, Object> entry : this.entrySet()) {
             Object value;
             if (entry.getValue() == null || NULL.equals(entry.getValue())) {
