@@ -1,4 +1,4 @@
-package detectors;
+package filters;
 
 import objects.JSONArray;
 import objects.JSONFile;
