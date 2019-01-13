@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "xxx",
+  "namespace": "xxx",
+  "fields" : [
+    {
+      "name": "hasX",
+      "type": "boolean"
+    }
+  ]
+}
