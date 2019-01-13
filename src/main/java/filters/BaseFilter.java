@@ -1,4 +1,4 @@
-package detectors;
+package filters;
 
 import objects.JSONArray;
 import objects.JSONFile;
@@ -100,7 +100,11 @@ class BaseFilter {
 
     private <T> boolean isType(Object object, Class<T> clazz) {
         if (object instanceof WrappedPrimitive) {
-            return clazz.isInstance(((WrappedPrimitive) object).getValue());
+            if (clazz.isInstance(object)) {
+                return clazz.isInstance(object);
+            } else {
+                return clazz.isInstance(((WrappedPrimitive) object).getValue());
+            }
         }
         return clazz.isInstance(object);
     }

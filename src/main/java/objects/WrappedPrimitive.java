@@ -4,11 +4,11 @@ public class WrappedPrimitive<T> implements WrappedObject {
 
     private final String originatingKey;
     private final WrappedObject parentObject;
-    private final Object value;
+    private final T value;
 
     WrappedPrimitive(String originatingKey,
                      WrappedObject parentObject,
-                     Object originalObject) {
+                     T originalObject) {
         if (originatingKey == null) {
             this.originatingKey = parentObject.getOriginatingKey();
         } else {
@@ -18,7 +18,7 @@ public class WrappedPrimitive<T> implements WrappedObject {
         this.value = originalObject;
     }
 
-    public Object getValue() {
+    public T getValue() {
         return value;
     }
 
