@@ -30,6 +30,10 @@ public class LintRule {
     @SuppressWarnings("unchecked")
     public void lint(JSONFile jsonFile) {
         List<?> filteredList = FilterMapper.filter(jsonFile, implementation);
+        if (filteredList == null) {
+            return;
+        }
+
         for (Object element : filteredList) {
             if (implementation.shouldReport(element)) {
                 System.out.println("Error in " + jsonFile.getFilePath());
