@@ -18,10 +18,10 @@ public class MainTest {
 
     @Before
     public void setup() throws Exception {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("test-file.pdsc").getFile());
-        jsonFile = new JSONFile(file);
-        log = Logger.getLogger("Logger");
+//        ClassLoader classLoader = getClass().getClassLoader();
+//        File file = new File(classLoader.getResource("test-file.pdsc").getFile());
+//        jsonFile = new JSONFile(file);
+//        log = Logger.getLogger("Logger");
     }
 
     @Test
@@ -34,17 +34,17 @@ public class MainTest {
 //        ArrayList<WrappedPrimitive<String>> wrappedStrings = filter.filterToStrings(jsonFile);
 //        wrappedStrings.forEach(e-> log.info(e.getOriginatingKey() + "\t" + e.toString()));
 
-        ArrayList<JSONObject> objects = filter.filterToObjects(jsonFile);
-        objects.forEach(e -> log.info(e.getOriginatingKey()));
-
-        objects.forEach(jsonObject -> {
-            if (jsonObject.getOriginatingKey().equals("fields")
-                    && jsonObject.getParentObject() instanceof JSONArray
-                    && jsonObject.get("type").equals("boolean")
-                    && ((String) jsonObject.get("name")).startsWith("has")) {
-                log.info("CAUGHT");
-            }
-        });
+//        ArrayList<JSONObject> objects = filter.filterToObjects(jsonFile);
+//        objects.forEach(e -> log.info(e.getOriginatingKey()));
+//
+//        objects.forEach(jsonObject -> {
+//            if (jsonObject.getOriginatingKey().equals("fields")
+//                    && jsonObject.getParentObject() instanceof JSONArray
+//                    && jsonObject.get("type").equals("boolean")
+//                    && ((String) jsonObject.get("name")).startsWith("has")) {
+//                log.info("CAUGHT");
+//            }
+//        });
 
 //        jsonFile.getObject().toMap().entrySet().forEach(entry ->
 //            log.info(entry.getKey() + "\t" + entry.getValue()));
