@@ -2,7 +2,6 @@ package lint;
 
 import filters.FilterMapper;
 import objects.JSONFile;
-import objects.JSONObject;
 
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class LintRule {
 
         for (Object element : filteredList) {
             if (implementation.shouldReport(element)) {
-                System.out.println("Error in " + jsonFile.getFilePath());
+                // Error found
             }
         }
     }
