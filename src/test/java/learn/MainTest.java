@@ -1,7 +1,5 @@
 package learn;
 
-import filters.Filters;
-import helpers.ImplementationHelper;
 import lint.LintImplementation;
 import lint.LintLevel;
 import lint.LintRegister;
@@ -31,29 +29,6 @@ public class MainTest {
 
     @Test
     public void testJson() throws Exception {
-        Filters filter = new Filters();
-//        log.info(filter.filterToObjects(jsonFile).toString());
-//        log.info(filter.filterToArrays(jsonFile).toString());
-//        log.info(filter.filterToStrings(jsonFile).toString());
-
-//        ArrayList<WrappedPrimitive<String>> wrappedStrings = filter.filterToStrings(jsonFile);
-//        wrappedStrings.forEach(e-> log.info(e.getOriginatingKey() + "\t" + e.toString()));
-
-//        ArrayList<JSONObject> objects = filter.filterToObjects(jsonFile);
-//        objects.forEach(e -> log.info(e.getOriginatingKey()));
-//
-//        objects.forEach(jsonObject -> {
-//            if (jsonObject.getOriginatingKey().equals("fields")
-//                    && jsonObject.getParentObject() instanceof JSONArray
-//                    && jsonObject.get("type").equals("boolean")
-//                    && ((String) jsonObject.get("name")).startsWith("has")) {
-//                log.info("CAUGHT");
-//            }
-//        });
-
-//        jsonFile.getObject().toMap().entrySet().forEach(entry ->
-//            log.info(entry.getKey() + "\t" + entry.getValue()));
-
         LintImplementation<JSONObject> lintImplementation = new LintImplementation<JSONObject>() {
 
             @Override
