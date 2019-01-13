@@ -1,17 +1,14 @@
 package objects;
 
-/**
- * Created by zsmoore on 1/12/19.
- */
-public class WrappedPrimitive implements WrappedObject {
+public class WrappedPrimitive<T> implements WrappedObject {
 
     private final String originatingKey;
     private final WrappedObject parentObject;
     private final Object value;
 
-    public WrappedPrimitive(String originatingKey,
-                            WrappedObject parentObject,
-                            Object originalObject) {
+    WrappedPrimitive(String originatingKey,
+                     WrappedObject parentObject,
+                     Object originalObject) {
         if (originatingKey == null) {
             this.originatingKey = parentObject.getOriginatingKey();
         } else {
@@ -23,6 +20,11 @@ public class WrappedPrimitive implements WrappedObject {
 
     public Object getValue() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return this.getValue().equals(other);
     }
 
     @Override
