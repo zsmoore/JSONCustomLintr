@@ -11,7 +11,7 @@ Introducing a tool to allow developers to lint JSON helps to:
 * Introduce rules to allow for more advanced codegen / client freedom by disallowing patterns that would clash with either  
   
 # Features 
-JsonLint leverages [JSON-java](https://github.com/stleary/JSON-java) to generate Java objects from JSON files.  
+JSONCustomLintr leverages [JSON-java](https://github.com/stleary/JSON-java) to generate Java objects from JSON files.
 This allows us to retain all the information we get from the library while also wrapping to provide more context to the object when creating linting rules.  
   
 Features of the library include:
