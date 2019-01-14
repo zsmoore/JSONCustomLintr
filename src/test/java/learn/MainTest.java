@@ -23,7 +23,6 @@ public class MainTest {
     @Before
     public void setup() throws Exception {
         ClassLoader classLoader = getClass().getClassLoader();
-        //file = new File(classLoader.getResource("/../res/").getFile());
         log = Logger.getGlobal();
     }
 
@@ -73,7 +72,7 @@ public class MainTest {
 
             @Override
             public String report(WrappedPrimitive<String> string) {
-                return string.getValue();
+                return string.getValue() + " found in file.";
             }
         };
 
@@ -87,7 +86,6 @@ public class MainTest {
         register.register(rule,
                           rule1);
 
-        log.info("Ugh" + System.getProperty("user.dir"));
         LintRunner lintRunner = new LintRunner(register, "./src/test/res");
         ReportRunner reportRunner = new ReportRunner(lintRunner);
         reportRunner.report("build/reports");
