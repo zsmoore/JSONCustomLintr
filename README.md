@@ -1,4 +1,4 @@
-# JsonLint
+# JSONCustomLintr
 Library for the creation, running, and reporting of Custom Lint Rules for files that follow [JSON Notation](https://www.json.org).  
   
 # Motivation  
