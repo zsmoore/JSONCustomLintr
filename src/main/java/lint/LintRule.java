@@ -32,7 +32,6 @@ public class LintRule {
     public Map<JSONFile, List<String>> lint(JSONFile ...jsonFiles) throws LintImplementation.NoReportSetException{
         Map<JSONFile, List<String>> reportMessages = new HashMap<>();
         for (JSONFile file: jsonFiles) {
-            reportMessages.put(file, new ArrayList<>());
 
             List<?> filteredList = FilterMapper.filter(file, implementation);
             if (filteredList == null) {
@@ -41,10 +40,10 @@ public class LintRule {
 
             for (Object element : filteredList) {
                 if (implementation.shouldReport(element)) {
-                    String customReportMessage = implementation.report(element);
-                    if (customReportMessage != null) {
-                        reportMessages.get(file).add(customReportMessage);
+                    if (!reportMessages.containsKey(file)) {
+                        reportMessages.put(file, new ArrayList<>());
                     }
+                    reportMessages.get(file).add(implementation.report(element));
                 }
             }
         }
