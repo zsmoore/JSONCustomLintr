@@ -1,27 +1,7 @@
 {
-  "type": "record",
-  "name": "test",
-  "namespace": "xxx",
   "fields" : [
     {
       "name": "hasX",
       "type": "boolean"
-    },
-    {
-          "name": "asdX",
-          "type": "boolean"
-     },
-     {
-               "name": "hasX",
-               "type": "boolean"
-          },
-          {
-                    "name": "hasX",
-                    "type": "boolean"
-               },
-                            {
-                                      "name": "hasX",
-                                      "type": "boolean"
-                                 }
-  ]
+    }]
 }
