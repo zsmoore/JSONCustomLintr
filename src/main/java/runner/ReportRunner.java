@@ -1,6 +1,5 @@
 package runner;
 
-import j2html.TagCreator;
 import j2html.tags.Tag;
 import report.Report;
 
@@ -21,7 +20,7 @@ public class ReportRunner {
         Tag reportHTML = report.report(lintRunner.lint());
         try {
             FileWriter writer = new FileWriter(new File(outputPath + "/lint-report.html"));
-            TagCreator.html(reportHTML).render(writer);
+            reportHTML.render(writer);
             System.out.println("Lint Report Written to " + new File(outputPath + "/lint-report.html").getAbsolutePath());
             writer.close();
         } catch (IOException e) {
