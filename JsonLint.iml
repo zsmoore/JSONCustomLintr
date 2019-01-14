@@ -22,7 +22,40 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="module-library" scope="PROVIDED">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/zsmoore/.gradle/caches/modules-2/files-2.1/com.j2html/j2html/1.3.0/d3ecb2cb1d971c50a39f8bcb1ff5ad6e24c732f0/j2html-1.3.0.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar:///home/zsmoore/.gradle/caches/modules-2/files-2.1/com.j2html/j2html/1.3.0/6c9e5bb79cadfd06d71dcf87ab9fb92ff15067f4/j2html-1.3.0-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
     <orderEntry type="module-library" scope="RUNTIME">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/zsmoore/.gradle/caches/modules-2/files-2.1/org.json/json/20180813/8566b2b0391d9d4479ea225645c6ed47ef17fe41/json-20180813.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar:///home/zsmoore/.gradle/caches/modules-2/files-2.1/org.json/json/20180813/60753006d96d5fc85b61b0897f3326b5c4e1c4f0/json-20180813-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="RUNTIME">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/zsmoore/.gradle/caches/modules-2/files-2.1/com.j2html/j2html/1.3.0/d3ecb2cb1d971c50a39f8bcb1ff5ad6e24c732f0/j2html-1.3.0.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar:///home/zsmoore/.gradle/caches/modules-2/files-2.1/com.j2html/j2html/1.3.0/6c9e5bb79cadfd06d71dcf87ab9fb92ff15067f4/j2html-1.3.0-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
       <library>
         <CLASSES>
           <root url="jar:///home/zsmoore/.gradle/caches/modules-2/files-2.1/org.json/json/20180813/8566b2b0391d9d4479ea225645c6ed47ef17fe41/json-20180813.jar!/"/>
@@ -36,11 +69,11 @@
     <orderEntry type="module-library" scope="TEST">
       <library>
         <CLASSES>
-          <root url="jar:///home/zsmoore/.gradle/caches/modules-2/files-2.1/org.json/json/20180813/8566b2b0391d9d4479ea225645c6ed47ef17fe41/json-20180813.jar!/"/>
+          <root url="jar:///home/zsmoore/.gradle/caches/modules-2/files-2.1/com.j2html/j2html/1.3.0/d3ecb2cb1d971c50a39f8bcb1ff5ad6e24c732f0/j2html-1.3.0.jar!/"/>
         </CLASSES>
         <JAVADOC/>
         <SOURCES>
-          <root url="jar:///home/zsmoore/.gradle/caches/modules-2/files-2.1/org.json/json/20180813/60753006d96d5fc85b61b0897f3326b5c4e1c4f0/json-20180813-sources.jar!/"/>
+          <root url="jar:///home/zsmoore/.gradle/caches/modules-2/files-2.1/com.j2html/j2html/1.3.0/6c9e5bb79cadfd06d71dcf87ab9fb92ff15067f4/j2html-1.3.0-sources.jar!/"/>
         </SOURCES>
       </library>
     </orderEntry>

@@ -3,7 +3,10 @@ package lint;
 import filters.FilterMapper;
 import objects.JSONFile;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LintRule {
 
@@ -12,7 +15,6 @@ public class LintRule {
     private final String issueId;
     private final String issueDescription;
     private final String issueExplanation;
-
 
     private LintRule(LintLevel level,
                      LintImplementation implementation,
@@ -27,19 +29,49 @@ public class LintRule {
     }
 
     @SuppressWarnings("unchecked")
-    public void lint(JSONFile jsonFile) {
-        List<?> filteredList = FilterMapper.filter(jsonFile, implementation);
-        if (filteredList == null) {
-            return;
-        }
+    public Map<JSONFile, List<String>> lint(JSONFile ...jsonFiles) throws LintImplementation.NoReportSetException{
+        Map<JSONFile, List<String>> reportMessages = new HashMap<>();
+        for (JSONFile file: jsonFiles) {
+            reportMessages.put(file, new ArrayList<>());
 
-        for (Object element : filteredList) {
-            if (implementation.shouldReport(element)) {
-                // Error found
+            List<?> filteredList = FilterMapper.filter(file, implementation);
+            if (filteredList == null) {
+                return null;
+            }
+
+            for (Object element : filteredList) {
+                if (implementation.shouldReport(element)) {
+                    String customReportMessage = implementation.report(element);
+                    if (customReportMessage != null) {
+                        reportMessages.get(file).add(customReportMessage);
+                    }
+                }
             }
         }
+
+        return reportMessages;
     }
 
+    public LintLevel getLevel() {
+        return level;
+    }
+
+    public String getIssueId() {
+        return issueId;
+    }
+
+    public String getIssueDescription() {
+        return issueDescription;
+    }
+
+    public String getIssueExplanation() {
+        return issueExplanation;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.issueId.hashCode();
+    }
 
     public static class Builder {
 
@@ -94,6 +126,4 @@ public class LintRule {
             }
         }
     }
-
-
 }

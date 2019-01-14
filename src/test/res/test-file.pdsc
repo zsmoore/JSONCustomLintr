@@ -1,6 +1,6 @@
 {
   "type": "record",
-  "name": "xxx",
+  "name": "test",
   "namespace": "xxx",
   "fields" : [
     {
@@ -10,6 +10,18 @@
     {
           "name": "asdX",
           "type": "boolean"
-     }
+     },
+     {
+               "name": "hasX",
+               "type": "boolean"
+          },
+          {
+                    "name": "hasX",
+                    "type": "boolean"
+               },
+                            {
+                                      "name": "hasX",
+                                      "type": "boolean"
+                                 }
   ]
 }
