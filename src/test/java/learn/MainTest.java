@@ -5,26 +5,26 @@ import lint.LintLevel;
 import lint.LintRegister;
 import lint.LintRule;
 import objects.JSONArray;
-import objects.JSONFile;
 import objects.JSONObject;
 import objects.WrappedPrimitive;
 import org.junit.Before;
 import org.junit.Test;
+import runner.LintRunner;
+import runner.ReportRunner;
 
 import java.io.File;
 import java.util.logging.Logger;
 
 public class MainTest {
 
-    private JSONFile jsonFile;
+    private File file;
     private static Logger log;
 
     @Before
     public void setup() throws Exception {
         ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("test-file.pdsc").getFile());
-        jsonFile = new JSONFile(file);
-//        log = Logger.getLogger("Logger");
+        //file = new File(classLoader.getResource("/../res/").getFile());
+        log = Logger.getGlobal();
     }
 
     @Test
@@ -49,6 +49,7 @@ public class MainTest {
                 boolean originatingKeyIsFields = isOriginatingKeyEqualTo(jsonObject, "fields");
                 boolean isParentArray = isParentOfType(jsonObject, JSONArray.class);
 
+                setReportMessage("This is a bad one:\t" + jsonObject);
                 return reduceBooleans(hasBooleanType, nameStartsWithHas, originatingKeyIsFields, isParentArray);
             }
         };
@@ -56,13 +57,39 @@ public class MainTest {
         LintRule rule = new LintRule.Builder()
                 .setLevel(LintLevel.ERROR)
                 .setImplementation(lintImplementation)
-                .setIssueId("")
+                .setIssueId("hasX Boolean Check")
+                .build();
+
+        LintImplementation<WrappedPrimitive<String>> lintImplementation1 = new LintImplementation<WrappedPrimitive<String>>() {
+            @Override
+            public Class<String> getClazz() {
+                return String.class;
+            }
+
+            @Override
+            public boolean shouldReport(WrappedPrimitive<String> string) {
+                return string.getValue().equals("test");
+            }
+
+            @Override
+            public String report(WrappedPrimitive<String> string) {
+                return string.getValue();
+            }
+        };
+
+        LintRule rule1 = new LintRule.Builder()
+                .setLevel(LintLevel.ERROR)
+                .setImplementation(lintImplementation1)
+                .setIssueId("String Name Test")
                 .build();
 
         LintRegister register = new LintRegister();
-        register.register(rule);
-        register.addFile(jsonFile);
+        register.register(rule,
+                          rule1);
 
-        register.lint();
+        log.info("Ugh" + System.getProperty("user.dir"));
+        LintRunner lintRunner = new LintRunner(register, "./src/test/res");
+        ReportRunner reportRunner = new ReportRunner(lintRunner);
+        reportRunner.report("build/reports");
     }
 }
