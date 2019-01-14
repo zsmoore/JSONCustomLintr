@@ -27,4 +27,9 @@ public class JSONFile {
     public String getFilePath() {
         return filePath;
     }
+
+    @Override
+    public int hashCode() {
+        return this.filePath.hashCode();
+    }
 }
