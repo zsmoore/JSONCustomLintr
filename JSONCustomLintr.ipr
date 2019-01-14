@@ -48,7 +48,7 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module filepath="$PROJECT_DIR$/JsonLint.iml" fileurl="file://$PROJECT_DIR$/JsonLint.iml"/>
+      <module filepath="$PROJECT_DIR$/JSONCustomLintr.iml" fileurl="file://$PROJECT_DIR$/JSONCustomLintr.iml"/>
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" assert-keyword="true" jdk-15="true" project-jdk-type="JavaSDK" assert-jdk-15="true" project-jdk-name="1.8">
