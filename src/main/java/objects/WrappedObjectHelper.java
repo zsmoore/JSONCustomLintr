@@ -21,7 +21,7 @@ class WrappedObjectHelper {
         } else if (originalObject instanceof WrappedObject) {
             return (WrappedObject) originalObject;
         } else {
-            wrappedObject = new WrappedPrimitive(originatingKey,
+            wrappedObject = new WrappedPrimitive<>(originatingKey,
                                                    parentObject,
                                                    originalObject);
         }
