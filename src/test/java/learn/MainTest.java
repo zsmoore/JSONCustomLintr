@@ -77,7 +77,7 @@ public class MainTest {
         };
 
         LintRule rule1 = new LintRule.Builder()
-                .setLevel(LintLevel.ERROR)
+                .setLevel(LintLevel.WARNING)
                 .setImplementation(lintImplementation1)
                 .setIssueId("String Name Test")
                 .build();
