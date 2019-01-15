@@ -15,10 +15,10 @@ public class JSONArray extends org.json.JSONArray implements WrappedObject {
     private List<Object> contents;
 
     JSONArray(String originatingKey,
-                     WrappedObject parentObject,
-                     org.json.JSONArray clone) {
-        super(clone.toList());
-        if (originatingKey == null) {
+              WrappedObject parentObject,
+              org.json.JSONArray clone) {
+        super(clone != null ? clone.toList() : null);
+        if (originatingKey == null && parentObject != null) {
             this.originatingKey = parentObject.getOriginatingKey();
         } else {
             this.originatingKey = originatingKey;
@@ -54,13 +54,15 @@ public class JSONArray extends org.json.JSONArray implements WrappedObject {
     @Override
     public JSONObject toJSONObject(org.json.JSONArray names) throws JSONException {
         if(names != null && !names.isEmpty() && !this.isEmpty()) {
-            objects.JSONObject jo = new objects.JSONObject(originatingKey, parentObject, null);
+            org.json.JSONObject jo = new org.json.JSONObject();
 
             for(int i = 0; i < names.length(); ++i) {
                 jo.put(names.getString(i), this.opt(i));
             }
-            jo.parseAndReplaceWithWrappers();
-            return jo;
+
+            objects.JSONObject retObj = new objects.JSONObject(originatingKey, parentObject, jo);
+            retObj.parseAndReplaceWithWrappers();
+            return retObj;
         } else {
             return null;
         }
@@ -72,6 +74,17 @@ public class JSONArray extends org.json.JSONArray implements WrappedObject {
             parseAndReplaceWithWrappers();
         }
         return contents;
+    }
+
+    @Override
+    public Object get(int index) {
+        if (contents == null) {
+            parseAndReplaceWithWrappers();
+        }
+        if (index < 0 || index > contents.size()) {
+            throw new IndexOutOfBoundsException();
+        }
+        return contents.get(index);
     }
 
 }

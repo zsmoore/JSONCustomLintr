@@ -9,7 +9,7 @@ public class WrappedPrimitive<T> implements WrappedObject {
     WrappedPrimitive(String originatingKey,
                      WrappedObject parentObject,
                      T originalObject) {
-        if (originatingKey == null) {
+        if (originatingKey == null && parentObject != null) {
             this.originatingKey = parentObject.getOriginatingKey();
         } else {
             this.originatingKey = originatingKey;
