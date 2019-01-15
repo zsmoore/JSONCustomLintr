@@ -1,6 +1,7 @@
 package runner;
 
 import lint.LintImplementation;
+import lint.LintLevel;
 import lint.LintRegister;
 import lint.LintRule;
 import objects.JSONFile;
@@ -64,7 +65,9 @@ public class LintRunner {
         Map<LintRule, Map<JSONFile, List<String>>> lintOutput = new HashMap<>();
         for (LintRule lintRule : lintRegister.getLintRules()) {
             try {
-                lintOutput.put(lintRule, lintRule.lint(filesToLint.toArray(new JSONFile[filesToLint.size()])));
+                if (lintRule.getLevel() != LintLevel.IGNORE) {
+                    lintOutput.put(lintRule, lintRule.lint(filesToLint.toArray(new JSONFile[filesToLint.size()])));
+                }
             } catch (LintImplementation.NoReportSetException e) {
                 throw new RuntimeException("Lint rule:\t" + lintRule.getIssueId()
                         + " caught lint error but did not have a report string in LintImplementation.");

@@ -2,6 +2,7 @@
   "fields" : [
     {
       "name": "hasX",
-      "type": "boolean"
+      "type": "boolean",
+      "abc": "test"
     }]
 }

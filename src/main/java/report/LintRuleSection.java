@@ -1,6 +1,7 @@
 package report;
 
 import j2html.tags.Tag;
+import lint.LintLevel;
 import lint.LintRule;
 import objects.JSONFile;
 
@@ -32,11 +33,11 @@ class LintRuleSection {
                     each(lintRuleMapEntry.getValue().entrySet(), pair ->
                             div(
                                 this.fileSection.getFileSummary(pair),
-                                hr().attr("width", "20%")
-                            )
+                                hr().attr("width", "0%")
+                            ).withClass("container-fluid")
                     )
-                )
-        );
+                ).withClasses("container-fluid")
+        ).withClasses("container-fluid", lintRuleMapEntry.getKey().getLevel() == LintLevel.ERROR ? "bg-danger" : "bg-warning");
     }
 
 }

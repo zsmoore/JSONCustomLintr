@@ -1,6 +1,5 @@
 package report;
 
-import j2html.TagCreator;
 import j2html.tags.Tag;
 import objects.JSONFile;
 
@@ -13,9 +12,10 @@ class FileSection {
 
     Tag getFileSummary(Map.Entry<JSONFile, List<String>> jsonFileToReports) {
         return div(
-                h4(jsonFileToReports.getKey().getFilePath()),
+                h4(jsonFileToReports.getKey().getFilePath()).withClass("text-white"),
                 div(
-                  each(jsonFileToReports.getValue(), TagCreator::p)
-               ));
+                  each(jsonFileToReports.getValue(), e -> p(e).withClass("text-white"))
+               ).withClass("container-fluid")
+        ).withClasses("container-fluid", "border", "bg-dark");
     }
 }

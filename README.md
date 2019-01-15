@@ -309,6 +309,9 @@ class Example {
 ```
 # Current Test Report Sample  
 As this library progresses this report will evolve over time  
+
+1/14/19 - Bootstrap and more advanced styling added
+![First Bootstrap Report](https://www.zachary-moore.com/assets/pictures/basicStyling.png)
   
 1/14/19 - First report unstyled, minimal information  
 ![First basic Report](https://www.zachary-moore.com/assets/pictures/basicTemplate-1-14-19.png)  
