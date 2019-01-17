@@ -24,7 +24,11 @@ public class WrappedPrimitive<T> implements WrappedObject {
 
     @Override
     public boolean equals(Object other) {
-        return this.getValue().equals(other);
+        if (other instanceof WrappedPrimitive) {
+            return this == other || this.getValue().equals(((WrappedPrimitive) other).getValue());
+        } else {
+            return this.getValue().equals(other);
+        }
     }
 
     @Override
