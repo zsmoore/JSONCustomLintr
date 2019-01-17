@@ -5,12 +5,10 @@ class WrappedObjectHelper {
     private WrappedObjectHelper(){}
 
     static WrappedObject getWrappedObject(String originatingKey,
-                                                 Object originalObject,
-                                                 WrappedObject parentObject) {
+                                          WrappedObject parentObject,
+                                          Object originalObject) {
         WrappedObject wrappedObject;
-        if (originalObject == null || org.json.JSONObject.NULL.equals(originalObject)) {
-            return null;
-        } else if (originalObject instanceof org.json.JSONObject) {
+        if (originalObject instanceof org.json.JSONObject) {
             wrappedObject = new JSONObject(originatingKey,
                                            parentObject,
                                            (org.json.JSONObject) originalObject);

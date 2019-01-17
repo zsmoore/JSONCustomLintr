@@ -46,8 +46,8 @@ public class JSONArray extends org.json.JSONArray implements WrappedObject {
         contents = StreamSupport.stream(this.spliterator(), false)
                         .map(obj ->
                             WrappedObjectHelper.getWrappedObject(this.originatingKey,
-                                                                 org.json.JSONObject.wrap(obj),
-                                                                 this))
+                                    this, org.json.JSONObject.wrap(obj)
+                            ))
                         .collect(Collectors.toList());
     }
 

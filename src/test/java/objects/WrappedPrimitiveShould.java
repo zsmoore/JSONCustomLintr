@@ -56,6 +56,4 @@ public class WrappedPrimitiveShould {
                 new WrappedPrimitive<>(null, null, primitive);
         assert(wrappedPrimitive.getValue().equals(primitive));
     }
-
-
 }
