@@ -26,5 +26,7 @@ public class ReportRunner {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        System.exit(this.lintRunner.analyzeLintAndGiveExitCode());
     }
 }

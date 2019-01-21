@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class LintRunner {
 
     private List<JSONFile> filesToLint;
+    private Map<LintRule, Map<JSONFile, List<String>>> lintOutput;
     private final LintRegister lintRegister;
 
     public LintRunner(LintRegister lintRegister,
@@ -73,6 +74,21 @@ public class LintRunner {
                         + " caught lint error but did not have a report string in LintImplementation.");
             }
         }
+        this.lintOutput = lintOutput;
         return lintOutput;
+    }
+
+    public int analyzeLintAndGiveExitCode() {
+        if (this.lintOutput == null) {
+            throw new RuntimeException("Attempted to analyze lint results before they were computed.");
+        }
+
+        for (Map.Entry<LintRule, Map<JSONFile, List<String>>> entry: this.lintOutput.entrySet()) {
+            if (entry.getKey().getLevel() == LintLevel.ERROR
+                    && entry.getValue().size() != 0) {
+                return 1;
+            }
+        }
+        return 0;
     }
 }
