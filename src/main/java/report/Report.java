@@ -32,8 +32,7 @@ public class Report {
     private Tag getAllLintRulesSection(Map<LintRule, Map<JSONFile, List<String>>> lintOutput) {
         return div(
             hr().attr("width", "0%"),
-            each(lintOutput, pair ->
-                    this.lintRuleSection.getLintRuleSection(pair)
+            each(lintOutput, this.lintRuleSection::getLintRuleSection
             )).withClasses("container-fluid", "bg-info", "border");
     }
 

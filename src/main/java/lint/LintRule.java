@@ -119,7 +119,7 @@ public class LintRule {
                                 issueExplanation);
         }
 
-        private static class LintRuleBuilderException extends Exception {
+        public static class LintRuleBuilderException extends Exception {
             private LintRuleBuilderException(String errorMessage) {
                 super(errorMessage);
             }
