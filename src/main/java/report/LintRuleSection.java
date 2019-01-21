@@ -12,7 +12,7 @@ import static j2html.TagCreator.*;
 
 class LintRuleSection {
 
-    private FileSection fileSection;
+    private final FileSection fileSection;
 
     LintRuleSection() {
         this.fileSection = new FileSection();

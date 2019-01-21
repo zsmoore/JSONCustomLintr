@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class ReportRunner {
 
-    private  LintRunner lintRunner;
+    private final LintRunner lintRunner;
 
     public ReportRunner(LintRunner lintRunner) {
         this.lintRunner = lintRunner;

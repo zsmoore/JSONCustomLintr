@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static j2html.TagCreator.*;
 
-public class ReportSummary {
+class ReportSummary {
 
     public Tag getReportSummaryHeader(Map<LintRule, Map<JSONFile, List<String>>> lintOutput) {
         return header(

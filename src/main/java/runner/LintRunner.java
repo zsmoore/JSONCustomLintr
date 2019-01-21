@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class LintRunner {
 
     private List<JSONFile> filesToLint;
-    private LintRegister lintRegister;
+    private final LintRegister lintRegister;
 
     public LintRunner(LintRegister lintRegister,
                       String basePath) {

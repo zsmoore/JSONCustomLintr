@@ -11,9 +11,9 @@ import static j2html.TagCreator.*;
 
 public class Report {
 
-    private ReportSummary reportSummary;
-    private LintRuleSection lintRuleSection;
-    private FooterSection footerSection;
+    private final ReportSummary reportSummary;
+    private final LintRuleSection lintRuleSection;
+    private final FooterSection footerSection;
 
     public Report() {
         this.reportSummary = new ReportSummary();
