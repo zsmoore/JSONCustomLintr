@@ -6,7 +6,7 @@ import java.util.List;
 
 public class LintRegister {
 
-    private List<LintRule> lintRules;
+    private final List<LintRule> lintRules;
 
     public LintRegister() {
         lintRules = new ArrayList<>();
