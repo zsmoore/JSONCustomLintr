@@ -4,7 +4,7 @@ import org.junit.Test;
 
 public class WrappedPrimitiveShould {
 
-    private Integer primitive = 5;
+    private final Integer primitive = 5;
 
     @Test
     public void getOriginatingKey() {

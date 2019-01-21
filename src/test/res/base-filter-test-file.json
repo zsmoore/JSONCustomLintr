@@ -1,0 +1,12 @@
+{
+  "name": {
+    "x": 5,
+    "y": 6
+  },
+  "records": [{
+    "x": "test"
+  },{
+    "x": "test"
+  }],
+  "aString": "string"
+}
