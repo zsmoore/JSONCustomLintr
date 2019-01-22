@@ -21,6 +21,11 @@ public class Report {
         this.footerSection = new FooterSection();
     }
 
+    /**
+     * Generate html report of input lint results
+     * @param lintOutput output from a {@link com.zachary_moore.runner.LintRunner} to generate based off of
+     * @return HTML representation
+     */
     public Tag report(Map<LintRule, Map<JSONFile, List<String>>> lintOutput) {
         if (lintOutput.size() == 0) {
             return null;

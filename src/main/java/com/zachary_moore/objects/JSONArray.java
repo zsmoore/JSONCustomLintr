@@ -86,5 +86,4 @@ public class JSONArray extends org.json.JSONArray implements WrappedObject {
         }
         return contents.get(index);
     }
-
 }

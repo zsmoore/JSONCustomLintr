@@ -4,6 +4,10 @@ class WrappedObjectHelper {
 
     private WrappedObjectHelper(){}
 
+    /**
+     * Take in JSONRepresentation and wrap in proper {@link WrappedObject}
+     * @return proper {@link WrappedObject} based on originalObject
+     */
     static WrappedObject getWrappedObject(String originatingKey,
                                           WrappedObject parentObject,
                                           Object originalObject) {

@@ -8,8 +8,18 @@ import com.zachary_moore.objects.WrappedPrimitive;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Base class with helper methods to use in {@link LintImplementation}
+ */
 public abstract class BaseJSONAnalyzer {
 
+    /**
+     * Check if JSONObject has a key with a value equal to parameter
+     * @param jsonObject {@link JSONObject} to check
+     * @param key Key in JSONObject
+     * @param toCheck Object to check equality for
+     * @return true if toCheck is in JSONObject
+     */
     protected boolean hasKeyAndValueEqualTo(JSONObject jsonObject, String key, Object toCheck) {
         if (jsonObject == null) {
             return false;
@@ -20,6 +30,13 @@ public abstract class BaseJSONAnalyzer {
                 || (desiredObject != null && desiredObject.equals(toCheck));
     }
 
+    /**
+     * Check if JSONArray has a value at an index equal to parameter
+     * @param jsonArray {@link JSONArray} to check
+     * @param index index that might be in JSONArray
+     * @param toCheck Object to check equality for
+     * @return true if toCheck is in JSONArray
+     */
     protected boolean hasIndexAndValueEqualTo(JSONArray jsonArray, int index, Object toCheck) {
         if (jsonArray == null) {
             return false;
@@ -47,6 +64,12 @@ public abstract class BaseJSONAnalyzer {
         }
     }
 
+    /**
+     * Attempt to get a {@link WrappedPrimitive} from a {@link JSONObject}
+     * @param jsonObject JSONObject to grab from
+     * @param key Key in JSONObject to check
+     * @return {@link WrappedPrimitive} if it exists in JSONObject
+     */
     protected WrappedPrimitive safeGetWrappedPrimitive(JSONObject jsonObject, String key) {
         Object fromObject = safeGet(jsonObject, key);
         if (fromObject == null || !(fromObject instanceof WrappedPrimitive)) {
@@ -55,6 +78,12 @@ public abstract class BaseJSONAnalyzer {
         return (WrappedPrimitive) fromObject;
     }
 
+    /**
+     * Attempt to get a {@link JSONObject} from a {@link JSONObject}
+     * @param jsonObject JSONObject to grab from
+     * @param key Key in JSONObject to check
+     * @return {@link JSONObject} if it exists in JSONObject
+     */
     protected  JSONObject safeGetJSONObject(JSONObject jsonObject, String key) {
         Object fromObject = safeGet(jsonObject, key);
         if (fromObject == null || !(fromObject instanceof JSONObject)) {
@@ -63,6 +92,12 @@ public abstract class BaseJSONAnalyzer {
         return (JSONObject) fromObject;
     }
 
+    /**
+     * Attempt to get a {@link JSONArray} from a {@link JSONObject}
+     * @param jsonObject JSONObject to grab from
+     * @param key Key in JSONObject to check
+     * @return {@link JSONArray} if it exists in JSONObject
+     */
     protected JSONArray safeGetJSONArray(JSONObject jsonObject, String key) {
         Object fromObject = safeGet(jsonObject, key);
         if (fromObject == null || !(fromObject instanceof JSONArray)) {
@@ -84,6 +119,12 @@ public abstract class BaseJSONAnalyzer {
         return arrayList.get(index);
     }
 
+    /**
+     * Attempt to get a {@link WrappedPrimitive} from a {@link JSONArray}
+     * @param array JSONArray to grab from
+     * @param index index in JSONArray to check
+     * @return {@link WrappedPrimitive} if it exists in JSONArray
+     */
     protected WrappedPrimitive safeGetWrappedPrimitive(JSONArray array, int index) {
         Object fromArray = safeGetIndex(array, index);
         if (fromArray == null || !(fromArray instanceof WrappedPrimitive)) {
@@ -92,6 +133,12 @@ public abstract class BaseJSONAnalyzer {
         return (WrappedPrimitive) fromArray;
     }
 
+    /**
+     * Attempt to get a {@link JSONObject} from a {@link JSONArray}
+     * @param array JSONArray to grab from
+     * @param index index in JSONArray to check
+     * @return {@link JSONObject} if it exists in JSONArray
+     */
     protected JSONObject safeGetJSONObject(JSONArray array, int index) {
         Object fromArray = safeGetIndex(array, index);
         if (fromArray == null || !(fromArray instanceof JSONObject)) {
@@ -100,6 +147,12 @@ public abstract class BaseJSONAnalyzer {
         return (JSONObject) fromArray;
     }
 
+    /**
+     * Attempt to get a {@link JSONArray} from a {@link JSONArray}
+     * @param array JSONArray to grab from
+     * @param index index in JSONArray to check
+     * @return {@link JSONArray} if it exists in JSONArray
+     */
     protected JSONArray safeGetJSONArray(JSONArray array, int index) {
         Object fromArray = safeGetIndex(array, index);
         if (fromArray == null || !(fromArray instanceof JSONArray)) {
@@ -108,16 +161,32 @@ public abstract class BaseJSONAnalyzer {
         return (JSONArray) fromArray;
     }
 
+    /**
+     * Check if {@link WrappedPrimitive} value is equal to other Object
+     * @param wrappedPrimitive object to check against
+     * @param toCheck object to check for
+     * @param <T> Type of wrapped primitive
+     * @return true if wrappedPrimitive's value is equal to toCheck
+     */
     protected <T> boolean isEqualTo(WrappedPrimitive<T> wrappedPrimitive, T toCheck) {
         return wrappedPrimitive.equals(toCheck);
     }
 
+    /**
+     * Safe method to check if {@link WrappedObject#getOriginatingKey()} is equal to parameter
+     * @param object WrappedObject to check against
+     * @param toCheck Key to check for
+     * @return true if Key is originating key in WrappedObject
+     */
     protected boolean isOriginatingKeyEqualTo(WrappedObject object, String toCheck) {
         return object != null
                 && ((object.getOriginatingKey() == null && toCheck == null)
                 || object.getOriginatingKey() != null && object.getOriginatingKey().equals(toCheck));
     }
 
+    /**
+     * Safe type check that includes {@link WrappedPrimitive} oddities
+     */
     protected <T> boolean isType(Object object, Class<T> clazz) {
         if (object instanceof WrappedPrimitive) {
             if (clazz.isInstance(object)) {
@@ -129,11 +198,18 @@ public abstract class BaseJSONAnalyzer {
         return clazz.isInstance(object);
     }
 
+    /**
+     * Safe function to check parent type of {@link WrappedObject}
+     */
     protected <T> boolean isParentOfType(WrappedObject object, Class<T> clazz) {
         return (object.getParentObject() == null && clazz == null)
                 || isType(object.getParentObject(), clazz);
     }
 
+    /**
+     * Given a list of booleans return true if all booleans are true
+     * @return true if all input booleans are true
+     */
     protected boolean reduceBooleans(Boolean... booleans) {
         return Arrays.stream(booleans).filter(b -> !b).count() == 0;
     }

@@ -11,8 +11,17 @@ import java.util.List;
 
 public class FilterMapper {
 
+    private FilterMapper() {}
+
+    private static Filters filters = new Filters();
+
+    /**
+     * Filter JSONFile down to a list of types determined by given {@link LintImplementation}
+     * @param jsonFile {@link JSONFile} to filter
+     * @param lintImplementation {@link LintImplementation} that will be used to determine what types we should filter JSONFile down to
+     * @return {@link java.util.ArrayList} of type {@link LintImplementation#getClazz()}
+     */
     public static List<?> filter(JSONFile jsonFile, LintImplementation lintImplementation) {
-        Filters filters = new Filters();
         if (lintImplementation.getClazz() == String.class) {
             return filters.filterToStrings(jsonFile);
         } else if (lintImplementation.getClazz() == Byte.class) {
