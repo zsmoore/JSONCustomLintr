@@ -1,10 +1,13 @@
 # JSONCustomLintr
-Library for the creation, running, and reporting of Custom Lint Rules for files that follow [JSON Notation](https://www.json.org).  
+Library for the creation, running, and reporting of Custom Lint Rules for files that follow [JSON Notation](https://www.json.org). 
+
+# Example Implementation Repo with Build Integration 
+Head over to [JSONCustomLinrExampleImplementation](https://github.com/zsmoore/JSONCustomLintrExampleImplementation) for full implementation example.
   
 # Motivation  
 The primary motivation for creating the library is for creating linting rules for avro schemas in an API environment.  
   
-Introducing a tool to allow developers to lint JSON helps to:  
+Introducing a tool to allow developers to lint JSON helps to:
 * Introduce a style safeguard to structured data schemas
 * Scale an API across multiple devs without having to worry about inconsistencies
 * Allow more hands off development and less monitoring of style conventions
@@ -20,11 +23,12 @@ Features of the library include:
 * Configurable level of lint severity
 * Running of lint rules on a single file or all files in a directory
 * Running of lint rules on any JSON format regardless of the file extension
-* HTML report summary of all lint warnings / errors  
+* HTML report summary of all lint warnings / errors
+* Built in exit code support for gradle build integration
 
 # Quickstart  
 
-Simple lint rule looking for any non-key String that is `test`  
+Simple lint rule looking for any non-key String that is `test`
 
 Example:  
 *Bad*
@@ -80,7 +84,7 @@ class Example {
 
         // Create ReportRunner and report lint errors
         ReportRunner reportRunner = new ReportRunner(lintRunner);
-        reportRunner.report("build/reports");        
+        reportRunner.report("build/reports");
     }
 }
 
@@ -89,7 +93,7 @@ class Example {
 
   
 # Usage  
-When creating and running lint rules there is a flow of classes to generate in order to create the rule.  
+When creating and running lint rules there is a flow of classes to generate in order to create the rule.
 
 The classes are:  
   
@@ -101,12 +105,12 @@ The classes are:
 &darr;  
 `LintRunner` - Pass in `LintRegister` and configure directories or files to be checked with registry's issues  
 &darr;  
-`ReportRunner`  - Pass in `LintRunner` and generate HTML report  
+`ReportRunner`  - Pass in `LintRunner` and generate HTML report
 
  ## WrappedObject  
   
 `WrappedObject` is an interface that 3 of our core classes implement.  
-This interface allows us to have more context about the objects we look at when analyzing them for linting.  
+This interface allows us to have more context about the objects we look at when analyzing them for linting.
   
 The interface provides 4 methods:  
 * `getOriginatingKey()` - returns the closest `JSONObject` key associated with this Object.  If there is no immediate key it will travel up the chain until one is found.  Only the root `JSONObject` will have a `null` return
@@ -125,11 +129,11 @@ In the library we have 3 `WrappedObject` implementing classes:
 `LintImplementation` takes in a type generic which must be one of the 3 provided classes that implement `WrappedObject`.  
 
 `LintImplementation` has 4 methods and an instance variable:  
- * `private String reportMessage` - the message that will be reported when this implementation catches a lint error. This `String` can be set at runtime or ignored and overwrote with `report(T t)`  
+ * `private String reportMessage` - the message that will be reported when this implementation catches a lint error. This `String` can be set at runtime or ignored and overwrote with `report(T t)`
  *  `getClazz()` - returns the target class to be analyzed.  If using `WrappedPrimitive<T>` must return `T.class` else must return `JSONArray` or `JSONObject`  
  * `shouldReport(T t)` - the main function of the class. This is where your LintRule will either catch an error or not.  Every instance of the `<T>` of your `LintImlpementation` will run through this method.  This is where you should apply your Lint logic and decide whether or not to report
  * `report(T t)` - funtion to return `reportMessage` or be `overwrote` and return a more static string
- * `setReportMessage()` - manually set the `reportMessage` string in the class (usually during `shouldReport()`) to provide more detail in the lint report  
+ * `setReportMessage()` - manually set the `reportMessage` string in the class (usually during `shouldReport()`) to provide more detail in the lint report
   
 *Note:*  If a reportMessage is not set when `report()` is called a `NoReportSetException` will be thrown.
 
@@ -193,13 +197,13 @@ When writing your shouldReport for a `LintImplementation` you have access to a l
     protected boolean reduceBooleans(Boolean... booleans);
   ```
 
-  ### Output from report  
+  ### Output from report
   There are 2 ways to set your reportMessage:
-   1. `@Override` the `report()` method.  
-   2. `setReportMessage()` in the `shouldReport()` and have more dynmic report messages  
+   1. `@Override` the `report()` method.
+   2. `setReportMessage()` in the `shouldReport()` and have more dynmic report messages
      
 ## LintRule  
-`LintRule` is our class we use to setup what triggers a failure for a lint rule as well as what will happen when we have a failure.  
+`LintRule` is our class we use to setup what triggers a failure for a lint rule as well as what will happen when we have a failure.
 
 `LineRule` can only be created with `LintRule.Builder` and can not be directly instantiated.
 
@@ -208,7 +212,7 @@ A `LintRule` can have the following properties set through the builder:
 * `LintImplementation implementation` (REQUIRED) - `LintImplementation` conigured to determine when this lint rule should report issues
 * `String issueId` (REQUIRED) - Name of this lint rule.  Must be unique.
 * `String issueDescription` - Short description of this lint rule.
-* `String issueExplanation` - More in-depth description of lint rule.  
+* `String issueExplanation` - More in-depth description of lint rule.
 
 *Note:* If the required fields are not set when `LintRule.Builder.build()` is called a `LintRuleBuilderException` will be thrown.
   
@@ -228,9 +232,18 @@ Our only method is
 
 This class has a 
 ``` Java
-    public Map<LintRule, Map<JSONFile, List<String>>> lint() 
+    public Map<LintRule, Map<JSONFile, List<String>>> lint()
 ```
 method which will lint our files for us but usually is just used as an intermediate class between our linting stack and reporting stack.  
+
+When calling `lint()` `LintRunner` will internally store the result for later analysis in 
+```Java
+    public int analyzeLintAndGiveExitCode() 
+```
+
+`analyzeLintAndGiveExitCode()` will analyze the interal lint representation and return eithe a `0` or `1`, the latter indicating a lint failure.  
+
+This method is called at the end of `ReportRunner`'s `report()` method.
 
 ## ReportRunner
 `ReportRunner` is the entrypoint to our Reporting stack and the end point of our linting library.
@@ -241,7 +254,20 @@ The class also has a
 ``` Java  
     public void report(String outputPath);
 ```
-method which will generate an html report of all the lint errors in the given path as supplied by the `LintRunner`
+method which will generate an html report of all the lint errors in the given path as supplied by the `LintRunner` as well as call `System.exit()` based on the `LintRunner`'s analysis of whether we passed our lint or not.
+  
+# Build Integration
+In [this](https://github.com/zsmoore/JSONCustomLintrExampleImplementation) repo we implemented a gradle task to be able to be tied into any build integration we want to do with our project.  
+  
+All that needs to happen is a new repo needs to be created with your custom linting rules, a main needs to tie it all together, and a gradle task has to hit the main.
+
+Since our `ReportRunner` class handles exit codes automatically for us, we can simply tie this build task however we want into our pipeline and we will either fail or succeed based on our lint status.  
+
+# Tying into existing repos  
+When trying to hook up to existing repos we can take 2 approaches:  
+
+1. Make lint rules in an existing project that holds our json files
+2. Make a separate library to hold our json lint rules, import into an existing project, and set up a build integration from there.  
 
 # More In-Depth Example  
 In this example we are checking if a `JSONObject`: 
@@ -308,10 +334,10 @@ class Example {
 }
 ```
 # Current Test Report Sample  
-As this library progresses this report will evolve over time  
+As this library progresses this report will evolve over time
 
 1/14/19 - Bootstrap and more advanced styling added
 ![First Bootstrap Report](https://www.zachary-moore.com/assets/pictures/basicStyling.png)
   
-1/14/19 - First report unstyled, minimal information  
+1/14/19 - First report unstyled, minimal information
 ![First basic Report](https://www.zachary-moore.com/assets/pictures/basicTemplate-1-14-19.png)  
