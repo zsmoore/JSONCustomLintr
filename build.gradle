@@ -2,18 +2,34 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'maven-publish'
 
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'com.zachary_moore'
             artifactId = 'JSONCustomLintr'
+            groupId = 'com.zachary_moore'
             version = '0.0.1'
-
             from components.java
+            artifact sourcesJar
+            artifact javadocJar
         }
     }
 }
 
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
 
 repositories {
     mavenCentral()
@@ -30,4 +46,6 @@ task copyTestResources(type: Copy) {
     from "${projectDir}/src/test/resources"
     into "${buildDir}/classes/test"
 }
+
+
 processTestResources.dependsOn copyTestResources

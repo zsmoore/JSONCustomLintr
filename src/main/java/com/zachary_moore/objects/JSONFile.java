@@ -27,6 +27,9 @@ public class JSONFile {
         bufferedReader.close();
     }
 
+    /**
+     * @return either {@link JSONObject} or {@link JSONArray} based on input file to constructor
+     */
     public Object getObject() {
         if (jsonObject != null) {
             return new JSONObject(null, null, jsonObject);

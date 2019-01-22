@@ -16,6 +16,10 @@ public class ReportRunner {
         this.lintRunner = lintRunner;
     }
 
+    /**
+     * Generate an HTML report for any Lint issues and exit program based off of lint results
+     * @param outputPath output path for html report
+     */
     public void report(String outputPath) {
         Report report = new Report();
         Tag reportHTML = report.report(lintRunner.lint());
