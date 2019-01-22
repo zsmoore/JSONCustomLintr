@@ -1,5 +1,19 @@
 # JSONCustomLintr
-Library for the creation, running, and reporting of Custom Lint Rules for files that follow [JSON Notation](https://www.json.org). 
+Library for the creation, running, and reporting of Custom Lint Rules for files that follow [JSON Notation](https://www.json.org).   
+
+* [Maven Info](#maven-info)
+* [Example Implementation](#example-implementation-repo-with-build-integration)
+* [Motivation](#motivation)
+* [Features](#features)
+* [Quickstart](#quickstart)
+* [Usage](#usage)
+* [Build Integration](#build-integration)
+* [Tying into existing repos](#tying-into-existing-repos)
+* [More In-Depth Example](#more-in-depth-example)
+* [Current Test Report Sample](#current-test-report-sample) 
+
+# Maven Info 
+In order to pull down this library from maven check out the [Maven Info](https://search.maven.org/artifact/com.zachary-moore/JSONCustomLintr/1.0.0/pom)
 
 # Example Implementation Repo with Build Integration 
 Head over to [JSONCustomLinrExampleImplementation](https://github.com/zsmoore/JSONCustomLintrExampleImplementation) for full implementation example.
