@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 task sourcesJar(type: Jar) {
     classifier = 'sources'
@@ -12,27 +13,127 @@ task javadocJar(type: Jar) {
     from javadoc.destinationDir
 }
 
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
+}
+
 publishing {
     publications {
-        maven(MavenPublication) {
+        mavenJava(MavenPublication) {
+            customizePom(pom)
+            groupId = 'com.zachary-moore'
             artifactId = 'JSONCustomLintr'
-            groupId = 'com.zachary_moore'
-            version = '0.0.1'
+            version = '1.0.0'
+
             from components.java
-            artifact sourcesJar
-            artifact javadocJar
+
+            artifact(sourcesJar) {
+                classifier = 'sources'
+            }
+
+            artifact(javadocJar) {
+                classifier = 'javadoc'
+            }
         }
     }
 }
 
-javadoc {
-    if(JavaVersion.current().isJava9Compatible()) {
-        options.addBooleanOption('html5', true)
+def customizePom(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        // eliminate test-scoped dependencies (no need in maven central POMs)
+        root.dependencies.removeAll { dep ->
+            dep.scope == "test"
+        }
+
+        // add all items necessary for maven central publication
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+
+            description 'Library for the creation, running, and reporting of Custom Lint Rules for files that follow JSON Notation.'
+            name 'JSONCustomLintr'
+            url 'https://github.com/zsmoore/JSONCustomLintr'
+            organization {
+                name 'com.zachary-moore'
+                url 'https://www.zachary-moore.com/'
+            }
+            issueManagement {
+                system 'GitHub'
+                url 'https://github.com/zsmoore/JSONCustomLintr/issues'
+            }
+            licenses {
+                license {
+                    name 'Apache License 2.0'
+                    url 'https://github.com/zsmoore/JSONCustomLintr/blob/master/LICENSE'
+                    distribution 'repo'
+                }
+            }
+            scm {
+                url 'https://github.com/zsmoore/JSONCustomLintr'
+                connection 'scm:git:git://github.com/zsmoore/JSONCustomLintr.git'
+                developerConnection 'scm:git:ssh://git@github.com:zsmoore/JSONCustomLintr.git'
+            }
+            developers {
+                developer {
+                    name 'Zachary moore'
+                    id 'zsmoore'
+                    email 'zsmoore@zachary-moore.com'
+                }
+            }
+        }
+    }
+}
+
+model {
+    tasks.generatePomFileForMavenJavaPublication {
+        destination = file("$buildDir/generated-pom.xml")
+    }
+    tasks.publishMavenJavaPublicationToMavenLocal {
+        dependsOn project.tasks.signArchives
+    }
+    tasks.publishMavenJavaPublicationToMavenRepository {
+        dependsOn project.tasks.signArchives
+    }
+}
+
+signing {
+    sign configurations.archives
+}
+
+pom.withXml {
+    def pomFile = file("${project.buildDir}/generated-pom.xml")
+    writeTo(pomFile)
+    def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+    artifact(pomAscFile) {
+        classifier = null
+        extension = 'pom.asc'
+    }
+}
+
+project.tasks.signArchives.signatureFiles.each {
+    artifact(it) {
+        def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+        if (matcher.find()) {
+            classifier = matcher.group(1)
+        } else {
+            classifier = null
+        }
+        extension = 'jar.asc'
     }
 }
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+        credentials {
+            username sonatypeUsername
+            password sonatypePassword
+        }
+    }
 }
 
 dependencies {
