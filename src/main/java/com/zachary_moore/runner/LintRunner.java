@@ -17,6 +17,11 @@ public class LintRunner {
     private Map<LintRule, Map<JSONFile, List<String>>> lintOutput;
     private final LintRegister lintRegister;
 
+    /**
+     * Create a LintRunner
+     * @param lintRegister representation of {@link LintRule} to run against
+     * @param basePath Base Path to setup {@link JSONFile} from
+     */
     public LintRunner(LintRegister lintRegister,
                       String basePath) {
         this.lintRegister = lintRegister;
@@ -62,6 +67,10 @@ public class LintRunner {
         return files;
     }
 
+    /**
+     * Lint all files in given path in constructor
+     * @return Representation of any lint issues
+     */
     public Map<LintRule, Map<JSONFile, List<String>>> lint() {
         Map<LintRule, Map<JSONFile, List<String>>> lintOutput = new HashMap<>();
         for (LintRule lintRule : lintRegister.getLintRules()) {
@@ -81,6 +90,10 @@ public class LintRunner {
         return lintOutput;
     }
 
+    /**
+     * Check lint output results and return proper exit code
+     * @return 0 if no {@link LintRule} report errors and are set to {@link LintLevel#ERROR} else 1
+     */
     public int analyzeLintAndGiveExitCode() {
         if (this.lintOutput == null) {
             throw new RuntimeException("Attempted to analyze lint results before they were computed.");

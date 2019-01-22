@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class to represent a lint rule configuration
+ */
 public class LintRule {
 
     private final LintLevel level;
@@ -28,6 +31,12 @@ public class LintRule {
         this.issueExplanation = issueExplanation;
     }
 
+    /**
+     * Given a list of files lint each file based on setup config
+     * @param jsonFiles List of {@link JSONFile} to lint
+     * @return {@link Map} representing each file with lint errors mapped to a list of each lint error determined by our {@link LintImplementation}
+     * @throws LintImplementation.NoReportSetException if there was no report set during runtime of our {@link LintImplementation}'s report
+     */
     @SuppressWarnings("unchecked")
     public Map<JSONFile, List<String>> lint(JSONFile ...jsonFiles) throws LintImplementation.NoReportSetException{
         Map<JSONFile, List<String>> reportMessages = new HashMap<>();
@@ -72,6 +81,9 @@ public class LintRule {
         return this.issueId.hashCode();
     }
 
+    /**
+     * Builder pattern class for building our {@link LintRule}
+     */
     public static class Builder {
 
         private LintLevel level;
@@ -105,6 +117,11 @@ public class LintRule {
             return this;
         }
 
+        /**
+         * Builds a {@link LintRule}
+         * @return new {@link LintRule}
+         * @throws LintRuleBuilderException if either {@link LintLevel}, IssueID, or {@link LintImplementation} is not set
+         */
         public LintRule build() throws LintRuleBuilderException {
             if (level == null
                     || implementation == null

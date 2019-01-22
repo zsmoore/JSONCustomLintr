@@ -1,5 +1,9 @@
 package com.zachary_moore.objects;
 
+/**
+ * Object to implement {@link WrappedObject} and encapsulate any non {@link org.json.JSONArray} or {@link org.json.JSONObject}
+ * @param <T> Type of original Object this class was created from
+ */
 public class WrappedPrimitive<T> implements WrappedObject {
 
     private final String originatingKey;

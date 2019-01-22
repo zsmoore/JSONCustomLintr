@@ -9,6 +9,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
+/**
+ * Intermediate Filter class to handle type casting
+ */
 class Filters extends BaseFilter {
 
     ArrayList<JSONObject> filterToObjects(JSONFile file) {
