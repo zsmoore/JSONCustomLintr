@@ -1,5 +1,19 @@
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'maven-publish'
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.zachary_moore'
+            artifactId = 'JSONCustomLintr'
+            version = '0.0.1'
+
+            from components.java
+        }
+    }
+}
+
 
 repositories {
     mavenCentral()
