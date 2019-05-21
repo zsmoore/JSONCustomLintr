@@ -1,29 +1,39 @@
 package com.zachary_moore.lint;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 
 public class LintRuleShould {
 
-    @Test(expected = LintRule.Builder.LintRuleBuilderException.class)
-    public void expectLintRuleBuilderExceptionBaseBuild() throws LintRule.Builder.LintRuleBuilderException {
-        new LintRule.Builder().build();
+    @Test
+    public void expectLintRuleBuilderExceptionBaseBuild() {
+        Assertions.assertThrows(LintRule.Builder.LintRuleBuilderException.class, () -> {
+            new LintRule.Builder().build();
+        });
     }
 
-    @Test(expected = LintRule.Builder.LintRuleBuilderException.class)
-    public void expectLintRuleBuilderExceptionNullImplementation() throws LintRule.Builder.LintRuleBuilderException {
-        new LintRule.Builder().setImplementation(null).build();
+    @Test
+    public void expectLintRuleBuilderExceptionNullImplementation() {
+        Assertions.assertThrows(LintRule.Builder.LintRuleBuilderException.class, () -> {
+            new LintRule.Builder().setImplementation(null).build();
+        });
     }
 
-    @Test(expected = LintRule.Builder.LintRuleBuilderException.class)
-    public void expectLintRuleBuilderExceptionNullIssueId() throws LintRule.Builder.LintRuleBuilderException {
-        new LintRule.Builder().setIssueId(null).build();
+    @Test
+    public void expectLintRuleBuilderExceptionNullIssueId() {
+        Assertions.assertThrows(LintRule.Builder.LintRuleBuilderException.class, () -> {
+            new LintRule.Builder().setIssueId(null).build();
+        });
     }
 
-    @Test(expected = LintRule.Builder.LintRuleBuilderException.class)
-    public void expectLintRuleBuilderExceptionNullLevel() throws LintRule.Builder.LintRuleBuilderException {
-        new LintRule.Builder().setLevel(null).build();
+    @Test
+    public void expectLintRuleBuilderExceptionNullLevel() {
+        Assertions.assertThrows(LintRule.Builder.LintRuleBuilderException.class, () -> {
+            new LintRule.Builder().setLevel(null).build();
+        });
     }
 
     @Test

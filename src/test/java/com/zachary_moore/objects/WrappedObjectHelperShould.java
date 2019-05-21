@@ -2,9 +2,10 @@ package com.zachary_moore.objects;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Test;
 
 import java.util.Collections;
+import org.junit.jupiter.api.Test;
+
 
 public class WrappedObjectHelperShould {
 

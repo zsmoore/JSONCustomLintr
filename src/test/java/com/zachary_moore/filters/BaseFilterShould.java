@@ -1,19 +1,23 @@
 package com.zachary_moore.filters;
 
-import com.zachary_moore.objects.*;
-import org.junit.Before;
-import org.junit.Test;
-
+import com.zachary_moore.objects.JSONArray;
+import com.zachary_moore.objects.JSONFile;
+import com.zachary_moore.objects.JSONObject;
+import com.zachary_moore.objects.WrappedObject;
+import com.zachary_moore.objects.WrappedPrimitive;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 public class BaseFilterShould {
 
     private JSONFile jsonFile;
     private BaseFilter baseFilter;
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         this.jsonFile = new JSONFile(new File(getClass()
                 .getClassLoader()
