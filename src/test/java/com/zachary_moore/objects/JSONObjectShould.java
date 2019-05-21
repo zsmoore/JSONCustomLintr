@@ -1,8 +1,9 @@
 package com.zachary_moore.objects;
 
-import org.junit.Test;
 
 import java.util.Map;
+import org.junit.jupiter.api.Test;
+
 
 public class JSONObjectShould {
 

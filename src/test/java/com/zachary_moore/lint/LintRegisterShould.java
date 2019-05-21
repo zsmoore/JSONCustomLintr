@@ -1,7 +1,9 @@
 package com.zachary_moore.lint;
 
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 
@@ -9,7 +11,7 @@ public class LintRegisterShould {
 
     private LintRegister lintRegister;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.lintRegister = new LintRegister();
     }

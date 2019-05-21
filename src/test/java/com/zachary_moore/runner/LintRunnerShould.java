@@ -6,11 +6,11 @@ import com.zachary_moore.lint.LintRegister;
 import com.zachary_moore.lint.LintRule;
 import com.zachary_moore.objects.JSONFile;
 import com.zachary_moore.objects.WrappedPrimitive;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.util.List;
 import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 public class LintRunnerShould {
 
@@ -18,7 +18,7 @@ public class LintRunnerShould {
     private LintRule.Builder builder;
     private LintRegister lintRegister;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.lintRunner = new LintRunner(new LintRegister(),
                                          "./src/test/resources");

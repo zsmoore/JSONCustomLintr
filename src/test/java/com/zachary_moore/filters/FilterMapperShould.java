@@ -5,18 +5,18 @@ import com.zachary_moore.objects.JSONArray;
 import com.zachary_moore.objects.JSONFile;
 import com.zachary_moore.objects.JSONObject;
 import com.zachary_moore.objects.WrappedPrimitive;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 public class FilterMapperShould {
 
     private JSONFile jsonFile;
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         this.jsonFile = new JSONFile(new File(getClass()
                 .getClassLoader()
