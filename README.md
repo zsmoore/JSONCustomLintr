@@ -355,11 +355,3 @@ As this library progresses this report will evolve over time
   
 1/14/19 - First report unstyled, minimal information
 ![First basic Report](https://www.zachary-moore.com/assets/pictures/basicTemplate-1-14-19.png)  
-
-# Building Locally
-If you want to play around with the library, then you can checkout and build it. 
-For building you need to add create a file `<home_dir>/.gradle/gradle.properties` and add the following:
-```
-sonatypeUsername=username
-sonatypePassword=password
-``` 
