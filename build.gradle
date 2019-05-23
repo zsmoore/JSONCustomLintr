@@ -13,6 +13,9 @@ task javadocJar(type: Jar) {
     from javadoc.destinationDir
 }
 
+def sonatypeUsername = hasProperty('sonatypeUsername') ? sonatypeUsername : 'username'
+def sonatypePassword = hasProperty('sonatypePassword') ? sonatypePassword : 'password'
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
