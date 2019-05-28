@@ -5,78 +5,74 @@ import com.zachary_moore.lint.LintLevel;
 import com.zachary_moore.lint.LintRegister;
 import com.zachary_moore.lint.LintRule;
 import com.zachary_moore.objects.JSONFile;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import org.apache.commons.io.FileUtils;
+
 
 public class LintRunner {
 
-    private List<JSONFile> filesToLint;
+    private String[] basePaths;
     private Map<LintRule, Map<JSONFile, List<String>>> lintOutput;
     private final LintRegister lintRegister;
 
     /**
      * Create a LintRunner
      * @param lintRegister representation of {@link LintRule} to run against
-     * @param basePath Base Path to setup {@link JSONFile} from
+     * @param basePaths Paths to folders or files to fetch {@link JSONFile}(s) from
      */
     public LintRunner(LintRegister lintRegister,
-                      String basePath) {
+                      String... basePaths) {
         this.lintRegister = lintRegister;
-
-        File basePathFile = new File(basePath);
-        if (basePathFile.isFile()) {
-            try {
-                this.filesToLint = new ArrayList<>(Collections.
-                        singletonList(new JSONFile(basePathFile)));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } else if (basePathFile.isDirectory()){
-            this.filesToLint = getAllFiles(basePath).stream()
-                    .map(f -> {
-                        try {
-                            return new JSONFile(f);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    })
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-        } else {
-            throw new RuntimeException("Input path is neither a file nor directory");
-        }
+        this.basePaths = basePaths;
     }
 
-    private List<File> getAllFiles(String basePath) {
-        List<File> files = new ArrayList<>();
-        File directory = new File(basePath);
+    private Set<JSONFile> getFilesToLint() {
+        Set<File> files = new HashSet<>();
 
-        File[] fList = directory.listFiles();
-        if (fList != null) {
-            for (File file : fList) {
-                if (file.isFile()) {
-                    files.add(file);
-                } else if (file.isDirectory()) {
-                    files.addAll(getAllFiles(file.getAbsolutePath()));
-                }
+        for (String basePath : this.basePaths) {
+            File file = new File(basePath);
+
+            if (file.isFile()) {
+                files.add(file);
+            } else if (file.isDirectory()) {
+                files.addAll(FileUtils.listFiles(file, null, true));
+            } else {
+                // TODO: Add proper logging
+                Logger.getGlobal().warning(basePath + " is not a valid file path");
             }
         }
-        return files;
+
+        return files.stream().map(file -> {
+            try {
+                return new JSONFile(file);
+            } catch (IOException e) {
+                // Is not a JSON file
+                return null;
+            }
+        }).filter(Objects::nonNull).collect(Collectors.toSet());
     }
 
     /**
-     * Lint all files in given path in constructor
+     * Lint all files in given path in constructor and store the output
      * @return Representation of any lint issues
      */
     public Map<LintRule, Map<JSONFile, List<String>>> lint() {
         Map<LintRule, Map<JSONFile, List<String>>> lintOutput = new HashMap<>();
+        Set<JSONFile> filesToLint = getFilesToLint();
+
         for (LintRule lintRule : lintRegister.getLintRules()) {
             try {
                 if (lintRule.getLevel() != LintLevel.IGNORE) {
-                    Map<JSONFile, List<String>> lintReports = lintRule.lint(filesToLint.toArray(new JSONFile[filesToLint.size()]));
+                    Map<JSONFile, List<String>> lintReports = lintRule.lint(filesToLint.toArray(new JSONFile[0]));
                     if (lintReports.size() != 0) {
                         lintOutput.put(lintRule, lintReports);
                     }
@@ -87,6 +83,7 @@ public class LintRunner {
             }
         }
         this.lintOutput = lintOutput;
+
         return lintOutput;
     }
 
@@ -105,6 +102,7 @@ public class LintRunner {
                 return 1;
             }
         }
+
         return 0;
     }
 }
