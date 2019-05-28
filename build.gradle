@@ -92,6 +92,7 @@ test {
 }
 
 dependencies {
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
     implementation group: 'org.json', name: 'json', version: '20180813'
     implementation group: 'com.j2html', name: 'j2html', version: '1.4.0'
 

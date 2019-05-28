@@ -74,4 +74,19 @@ public class LintRunnerShould {
         lintRunner.lint();
         assert(lintRunner.analyzeLintAndGiveExitCode() == 0);
     }
+
+    @Test
+    public void lintRunnerShouldTakeMultipleFiles() throws Exception {
+        LintRule lintRule = builder.setLevel(LintLevel.ERROR).build();
+        this.lintRegister.register(lintRule);
+        LintRunner lintRunner =
+                new LintRunner(
+                        this.lintRegister,
+                        "./src/test/resources/test-2.json",
+                        "./src/test/resources/test-file.pdsc");
+        Map<LintRule, Map<JSONFile, List<String>>> lintOutput = lintRunner.lint();
+
+        assert(lintRunner.analyzeLintAndGiveExitCode() == 1);
+        assert(lintOutput.get(lintRule).size() == 2);
+    }
 }
