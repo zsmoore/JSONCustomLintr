@@ -16,6 +16,11 @@ task javadocJar(type: Jar) {
 def sonatypeUsername = hasProperty('sonatypeUsername') ? sonatypeUsername : 'username'
 def sonatypePassword = hasProperty('sonatypePassword') ? sonatypePassword : 'password'
 
+group = 'com.zachary-moore'
+version = '1.0.0'
+
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -57,10 +62,6 @@ publishing {
                 }
             }
 
-            groupId = 'com.zachary-moore'
-            artifactId = 'JSONCustomLintr'
-            version = '1.0.0'
-
             from components.java
 
             artifact sourcesJar
@@ -81,6 +82,10 @@ publishing {
 
 signing {
     sign publishing.publications.mavenJava
+}
+
+tasks.withType(Sign) {
+    onlyIf { isReleaseVersion }
 }
 
 repositories {
