@@ -95,7 +95,8 @@ class Example {
 
         // Create LintRunner with register and path to lint
         LintRunner lintRunner = new LintRunner(register, "./models");
-
+        lintRunner.lint()
+        
         // Create ReportRunner and report lint errors
         ReportRunner reportRunner = new ReportRunner(lintRunner);
         reportRunner.report("build/reports");
@@ -246,7 +247,7 @@ Our only method is
 
 This class has a 
 ``` Java
-    public Map<LintRule, Map<JSONFile, List<String>>> lint()
+    public void lint()
 ```
 method which will lint our files for us but usually is just used as an intermediate class between our linting stack and reporting stack.  
 
@@ -341,6 +342,7 @@ class Example {
         register.register(rule);
 
         LintRunner lintRunner = new LintRunner(register, "./models");
+        lintRunner.lint();
 
         ReportRunner reportRunner = new ReportRunner(lintRunner);
         reportRunner.report("build/reports");

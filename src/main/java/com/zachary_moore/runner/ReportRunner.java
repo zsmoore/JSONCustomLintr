@@ -1,8 +1,7 @@
 package com.zachary_moore.runner;
 
-import j2html.tags.Tag;
 import com.zachary_moore.report.Report;
-
+import j2html.tags.Tag;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,7 +21,7 @@ public class ReportRunner {
      */
     public void report(String outputPath) {
         Report report = new Report();
-        Tag reportHTML = report.report(lintRunner.lint());
+        Tag reportHTML = report.report(lintRunner.getLintOutput());
         if (reportHTML == null) {
             System.exit(0);
         }

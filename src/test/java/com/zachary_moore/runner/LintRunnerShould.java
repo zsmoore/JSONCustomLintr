@@ -41,8 +41,8 @@ public class LintRunnerShould {
 
     @Test
     public void testNoLintReport() {
-        Map<LintRule, Map<JSONFile, List<String>>> lintOutput = lintRunner.lint();
-        assert(lintOutput.size() == 0);
+        lintRunner.lint();
+        assert(lintRunner.getLintOutput().size() == 0);
     }
 
     @Test
@@ -84,7 +84,9 @@ public class LintRunnerShould {
                         this.lintRegister,
                         "./src/test/resources/test-2.json",
                         "./src/test/resources/test-file.pdsc");
-        Map<LintRule, Map<JSONFile, List<String>>> lintOutput = lintRunner.lint();
+        lintRunner.lint();
+
+        Map<LintRule, Map<JSONFile, List<String>>> lintOutput = lintRunner.getLintOutput();
 
         assert(lintRunner.analyzeLintAndGiveExitCode() == 1);
         assert(lintOutput.get(lintRule).size() == 2);

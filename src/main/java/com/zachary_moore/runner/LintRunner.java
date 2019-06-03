@@ -7,6 +7,8 @@ import com.zachary_moore.lint.LintRule;
 import com.zachary_moore.objects.JSONFile;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +24,8 @@ public class LintRunner {
 
     private String[] basePaths;
     private Map<LintRule, Map<JSONFile, List<String>>> lintOutput;
+
+    private List<String> invalidFilePaths;
     private final LintRegister lintRegister;
 
     /**
@@ -33,6 +37,7 @@ public class LintRunner {
                       String... basePaths) {
         this.lintRegister = lintRegister;
         this.basePaths = basePaths;
+        this.invalidFilePaths = new ArrayList<>();
     }
 
     private Set<JSONFile> getFilesToLint() {
@@ -48,6 +53,7 @@ public class LintRunner {
             } else {
                 // TODO: Add proper logging
                 Logger.getGlobal().warning(basePath + " is not a valid file path");
+                invalidFilePaths.add(basePath);
             }
         }
 
@@ -65,7 +71,7 @@ public class LintRunner {
      * Lint all files in given path in constructor and store the output
      * @return Representation of any lint issues
      */
-    public Map<LintRule, Map<JSONFile, List<String>>> lint() {
+    public void lint() {
         Map<LintRule, Map<JSONFile, List<String>>> lintOutput = new HashMap<>();
         Set<JSONFile> filesToLint = getFilesToLint();
 
@@ -83,8 +89,6 @@ public class LintRunner {
             }
         }
         this.lintOutput = lintOutput;
-
-        return lintOutput;
     }
 
     /**
@@ -104,5 +108,13 @@ public class LintRunner {
         }
 
         return 0;
+    }
+
+    public Map<LintRule, Map<JSONFile, List<String>>> getLintOutput() {
+        return lintOutput;
+    }
+
+    public List<String> getInvalidFilePaths() {
+        return invalidFilePaths;
     }
 }
