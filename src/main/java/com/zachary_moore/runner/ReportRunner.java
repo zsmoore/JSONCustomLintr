@@ -1,20 +1,18 @@
 package com.zachary_moore.runner;
 
-import j2html.tags.Tag;
 import com.zachary_moore.report.Report;
-
+import j2html.tags.Tag;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Logger;
+import lombok.RequiredArgsConstructor;
 
+
+@RequiredArgsConstructor
 public class ReportRunner {
 
     private final LintRunner lintRunner;
-
-    public ReportRunner(LintRunner lintRunner) {
-        this.lintRunner = lintRunner;
-    }
 
     /**
      * Generate an HTML report for any Lint issues and exit program based off of lint results

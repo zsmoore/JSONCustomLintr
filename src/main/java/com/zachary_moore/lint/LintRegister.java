@@ -3,20 +3,23 @@ package com.zachary_moore.lint;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+
 
 /**
  * Class to be passed around to represent all {@link LintRule} to be checked
  */
+
+@Getter
+@NoArgsConstructor
 public class LintRegister {
 
     /**
      * List to hold all of our {@link LintRule}
      */
-    private final List<LintRule> lintRules;
-
-    public LintRegister() {
-        lintRules = new ArrayList<>();
-    }
+    private final List<LintRule> lintRules = new ArrayList<>();
 
     /**
      * Register new LintRule into {@link LintRegister}
@@ -24,9 +27,5 @@ public class LintRegister {
      */
     public void register(LintRule ...toRegister) {
         lintRules.addAll(Arrays.asList(toRegister));
-    }
-
-    public List<LintRule> getLintRules() {
-        return lintRules;
     }
 }

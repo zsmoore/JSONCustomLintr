@@ -1,13 +1,16 @@
 package com.zachary_moore.objects;
 
-import org.json.JSONException;
-
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Getter;
+import org.json.JSONException;
 
 public class JSONObject extends org.json.JSONObject implements WrappedObject {
 
+    @Getter
     private final String originatingKey;
+
+    @Getter
     private final WrappedObject parentObject;
 
     private final org.json.JSONObject clonedObject;
@@ -23,16 +26,6 @@ public class JSONObject extends org.json.JSONObject implements WrappedObject {
         }
         this.parentObject = parentObject;
         this.clonedObject = clone;
-    }
-
-    @Override
-    public String getOriginatingKey() {
-        return originatingKey;
-    }
-
-    @Override
-    public WrappedObject getParentObject() {
-        return parentObject;
     }
 
     @Override

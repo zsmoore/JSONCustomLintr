@@ -1,5 +1,10 @@
 package com.zachary_moore.lint;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
+
 /**
  * Abstract class to represent a Lint implementation
  * @param <T> Type of Class to build a LintRule for
@@ -9,6 +14,7 @@ public abstract class LintImplementation<T> extends BaseJSONAnalyzer {
     /**
      * Message reported when a lint issue is found, can be set at runtime or statically
      */
+    @Setter(AccessLevel.PROTECTED)
     private String reportMessage;
 
     /**
@@ -35,10 +41,6 @@ public abstract class LintImplementation<T> extends BaseJSONAnalyzer {
             throw new NoReportSetException("No Report Message Set When Lint Error Found");
         }
         return reportMessage;
-    }
-
-    protected void setReportMessage(String reportMessage) {
-        this.reportMessage = reportMessage;
     }
 
     public static class NoReportSetException extends Exception {

@@ -1,14 +1,16 @@
 package com.zachary_moore.objects;
 
-class WrappedObjectHelper {
+import lombok.experimental.UtilityClass;
 
-    private WrappedObjectHelper(){}
+
+@UtilityClass
+class WrappedObjectHelper {
 
     /**
      * Take in JSONRepresentation and wrap in proper {@link WrappedObject}
      * @return proper {@link WrappedObject} based on originalObject
      */
-    static WrappedObject getWrappedObject(String originatingKey,
+    WrappedObject getWrappedObject(String originatingKey,
                                           WrappedObject parentObject,
                                           Object originalObject) {
         WrappedObject wrappedObject;

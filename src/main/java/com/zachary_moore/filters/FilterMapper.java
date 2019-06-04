@@ -8,12 +8,13 @@ import com.zachary_moore.objects.JSONObject;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
+import lombok.experimental.UtilityClass;
 
+
+@UtilityClass
 public class FilterMapper {
 
-    private FilterMapper() {}
-
-    private static Filters filters = new Filters();
+    private Filters filters = new Filters();
 
     /**
      * Filter JSONFile down to a list of types determined by given {@link LintImplementation}
@@ -21,7 +22,7 @@ public class FilterMapper {
      * @param lintImplementation {@link LintImplementation} that will be used to determine what types we should filter JSONFile down to
      * @return {@link java.util.ArrayList} of type {@link LintImplementation#getClazz()}
      */
-    public static List<?> filter(JSONFile jsonFile, LintImplementation lintImplementation) {
+    public List<?> filter(JSONFile jsonFile, LintImplementation lintImplementation) {
         if (lintImplementation.getClazz() == String.class) {
             return filters.filterToStrings(jsonFile);
         } else if (lintImplementation.getClazz() == Byte.class) {

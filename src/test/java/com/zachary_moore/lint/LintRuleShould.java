@@ -10,50 +10,50 @@ public class LintRuleShould {
 
     @Test
     public void expectLintRuleBuilderExceptionBaseBuild() {
-        Assertions.assertThrows(LintRule.Builder.LintRuleBuilderException.class, () -> {
-            new LintRule.Builder().build();
+        Assertions.assertThrows(NullPointerException.class, () -> {
+            LintRule.builder().build();
         });
     }
 
     @Test
     public void expectLintRuleBuilderExceptionNullImplementation() {
-        Assertions.assertThrows(LintRule.Builder.LintRuleBuilderException.class, () -> {
-            new LintRule.Builder().setImplementation(null).build();
+        Assertions.assertThrows(NullPointerException.class, () -> {
+            LintRule.builder().implementation(null).build();
         });
     }
 
     @Test
     public void expectLintRuleBuilderExceptionNullIssueId() {
-        Assertions.assertThrows(LintRule.Builder.LintRuleBuilderException.class, () -> {
-            new LintRule.Builder().setIssueId(null).build();
+        Assertions.assertThrows(NullPointerException.class, () -> {
+            LintRule.builder().issueId(null).build();
         });
     }
 
     @Test
     public void expectLintRuleBuilderExceptionNullLevel() {
-        Assertions.assertThrows(LintRule.Builder.LintRuleBuilderException.class, () -> {
-            new LintRule.Builder().setLevel(null).build();
+        Assertions.assertThrows(NullPointerException.class, () -> {
+            LintRule.builder().level(null).build();
         });
     }
 
     @Test
-    public void minimalLintRule() throws LintRule.Builder.LintRuleBuilderException {
-        LintRule lintRule = new LintRule.Builder()
-                .setImplementation(mock(LintImplementation.class))
-                .setLevel(LintLevel.IGNORE)
-                .setIssueId("")
+    public void minimalLintRule() {
+        LintRule lintRule = LintRule.builder()
+                .implementation(mock(LintImplementation.class))
+                .level(LintLevel.IGNORE)
+                .issueId("")
                 .build();
         assert(lintRule != null);
     }
 
     @Test
-    public void fullLintRule() throws LintRule.Builder.LintRuleBuilderException {
-        LintRule lintRule = new LintRule.Builder()
-                .setImplementation(mock(LintImplementation.class))
-                .setLevel(LintLevel.IGNORE)
-                .setIssueId("")
-                .setIssueDescription("")
-                .setIssueExplanation("")
+    public void fullLintRule() {
+        LintRule lintRule = LintRule.builder()
+                .implementation(mock(LintImplementation.class))
+                .level(LintLevel.IGNORE)
+                .issueId("")
+                .issueDescription("")
+                .issueExplanation("")
                 .build();
         assert(lintRule != null);
     }
