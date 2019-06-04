@@ -14,7 +14,7 @@ public class JSONArray extends org.json.JSONArray implements WrappedObject {
 
     private List<Object> contents;
 
-    JSONArray(String originatingKey,
+    public JSONArray(String originatingKey,
               WrappedObject parentObject,
               org.json.JSONArray clone) {
         super(clone != null ? clone.toList() : null);
