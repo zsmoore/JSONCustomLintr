@@ -12,7 +12,7 @@ public class JSONObject extends org.json.JSONObject implements WrappedObject {
 
     private final org.json.JSONObject clonedObject;
 
-    public JSONObject(String originatingKey,
+    JSONObject(String originatingKey,
                WrappedObject parentObject,
                org.json.JSONObject clone) {
         super(clone != null ? clone.toMap() : null);
