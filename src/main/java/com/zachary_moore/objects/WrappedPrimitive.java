@@ -10,7 +10,7 @@ public class WrappedPrimitive<T> implements WrappedObject {
     private final WrappedObject parentObject;
     private final T value;
 
-    WrappedPrimitive(String originatingKey,
+    public WrappedPrimitive(String originatingKey,
                      WrappedObject parentObject,
                      T originalObject) {
         if (originatingKey == null && parentObject != null) {
