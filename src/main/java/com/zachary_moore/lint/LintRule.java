@@ -3,10 +3,13 @@ package com.zachary_moore.lint;
 import com.zachary_moore.filters.FilterMapper;
 import com.zachary_moore.objects.JSONFile;
 
+import com.zachary_moore.objects.WrappedObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
+
 
 /**
  * Class to represent a lint rule configuration
@@ -38,26 +41,43 @@ public class LintRule {
      * @throws LintImplementation.NoReportSetException if there was no report set during runtime of our {@link LintImplementation}'s report
      */
     @SuppressWarnings("unchecked")
-    public Map<JSONFile, List<String>> lint(JSONFile ...jsonFiles) throws LintImplementation.NoReportSetException{
-        Map<JSONFile, List<String>> reportMessages = new HashMap<>();
+    public Map<JSONFile, List<Error>> lint(JSONFile ...jsonFiles) throws LintImplementation.NoReportSetException{
+        Map<JSONFile, List<Error>> reportMessages = new HashMap<>();
+
         for (JSONFile file: jsonFiles) {
 
-            List<?> filteredList = FilterMapper.filter(file, implementation);
+            List<? extends WrappedObject> filteredList = FilterMapper.filter(file, implementation);
             if (filteredList == null) {
                 return null;
             }
 
-            for (Object element : filteredList) {
+            for (WrappedObject element : filteredList) {
                 if (implementation.shouldReport(element)) {
+                    String path = getPath(element);
+
                     if (!reportMessages.containsKey(file)) {
                         reportMessages.put(file, new ArrayList<>());
                     }
-                    reportMessages.get(file).add(implementation.report(element));
+                    reportMessages.get(file).add(new Error(path, implementation.report(element)));
                 }
             }
         }
 
         return reportMessages;
+    }
+
+    private String getPath(WrappedObject element) {
+        if (StringUtils.isBlank(element.getOriginatingKey()))
+            return "";
+
+        if (element.getParentObject() == null || StringUtils.isBlank(element.getParentObject().getOriginatingKey()))
+            return element.getOriginatingKey();
+
+        String parentPath = getPath(element.getParentObject());
+
+        if (StringUtils.isBlank(parentPath))
+            return element.getOriginatingKey();
+        return parentPath + "." + element.getOriginatingKey();
     }
 
     public LintLevel getLevel() {

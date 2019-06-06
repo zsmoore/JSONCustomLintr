@@ -4,7 +4,7 @@ import com.zachary_moore.lint.LintImplementation;
 import com.zachary_moore.objects.JSONArray;
 import com.zachary_moore.objects.JSONFile;
 import com.zachary_moore.objects.JSONObject;
-
+import com.zachary_moore.objects.WrappedObject;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
@@ -21,7 +21,7 @@ public class FilterMapper {
      * @param lintImplementation {@link LintImplementation} that will be used to determine what types we should filter JSONFile down to
      * @return {@link java.util.ArrayList} of type {@link LintImplementation#getClazz()}
      */
-    public static List<?> filter(JSONFile jsonFile, LintImplementation lintImplementation) {
+    public static List<? extends  WrappedObject> filter(JSONFile jsonFile, LintImplementation lintImplementation) {
         if (lintImplementation.getClazz() == String.class) {
             return filters.filterToStrings(jsonFile);
         } else if (lintImplementation.getClazz() == Byte.class) {

@@ -1,5 +1,6 @@
 package com.zachary_moore.report;
 
+import com.zachary_moore.lint.Error;
 import j2html.tags.Tag;
 import com.zachary_moore.lint.LintLevel;
 import com.zachary_moore.lint.LintRule;
@@ -18,9 +19,9 @@ class LintRuleSection {
         this.fileSection = new FileSection();
     }
 
-    Tag getLintRuleSection(Map.Entry<LintRule, Map<JSONFile, List<String>>> lintRuleMapEntry) {
+    Tag getLintRuleSection(Map.Entry<LintRule, Map<JSONFile, List<Error>>> lintRuleMapEntry) {
         int numTotalIssues = 0;
-        for (Map.Entry<JSONFile, List<String>> entry : lintRuleMapEntry.getValue().entrySet()) {
+        for (Map.Entry<JSONFile, List<Error>> entry : lintRuleMapEntry.getValue().entrySet()) {
             numTotalIssues += entry.getValue().size();
         }
         return div(

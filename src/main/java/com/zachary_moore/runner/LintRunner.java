@@ -1,5 +1,6 @@
 package com.zachary_moore.runner;
 
+import com.zachary_moore.lint.Error;
 import com.zachary_moore.lint.LintImplementation;
 import com.zachary_moore.lint.LintLevel;
 import com.zachary_moore.lint.LintRegister;
@@ -7,7 +8,6 @@ import com.zachary_moore.lint.LintRule;
 import com.zachary_moore.objects.JSONFile;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,7 +23,7 @@ import org.apache.commons.io.FileUtils;
 public class LintRunner {
 
     private String[] basePaths;
-    private Map<LintRule, Map<JSONFile, List<String>>> lintOutput;
+    private Map<LintRule, Map<JSONFile, List<Error>>> lintOutput;
 
     private List<String> invalidFilePaths;
     private final LintRegister lintRegister;
@@ -72,13 +72,13 @@ public class LintRunner {
      * @return Representation of any lint issues
      */
     public void lint() {
-        Map<LintRule, Map<JSONFile, List<String>>> lintOutput = new HashMap<>();
+        Map<LintRule, Map<JSONFile, List<Error>>> lintOutput = new HashMap<>();
         Set<JSONFile> filesToLint = getFilesToLint();
 
         for (LintRule lintRule : lintRegister.getLintRules()) {
             try {
                 if (lintRule.getLevel() != LintLevel.IGNORE) {
-                    Map<JSONFile, List<String>> lintReports = lintRule.lint(filesToLint.toArray(new JSONFile[0]));
+                    Map<JSONFile, List<Error>> lintReports = lintRule.lint(filesToLint.toArray(new JSONFile[0]));
                     if (lintReports.size() != 0) {
                         lintOutput.put(lintRule, lintReports);
                     }
@@ -100,7 +100,7 @@ public class LintRunner {
             throw new RuntimeException("Attempted to analyze lint results before they were computed.");
         }
 
-        for (Map.Entry<LintRule, Map<JSONFile, List<String>>> entry: this.lintOutput.entrySet()) {
+        for (Map.Entry<LintRule, Map<JSONFile, List<Error>>> entry: this.lintOutput.entrySet()) {
             if (entry.getKey().getLevel() == LintLevel.ERROR
                     && entry.getValue().size() != 0) {
                 return 1;
@@ -110,7 +110,7 @@ public class LintRunner {
         return 0;
     }
 
-    public Map<LintRule, Map<JSONFile, List<String>>> getLintOutput() {
+    public Map<LintRule, Map<JSONFile, List<Error>>> getLintOutput() {
         return lintOutput;
     }
 
