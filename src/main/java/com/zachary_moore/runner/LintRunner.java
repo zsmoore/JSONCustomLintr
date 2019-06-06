@@ -72,7 +72,7 @@ public class LintRunner {
         for (LintRule lintRule : lintRegister.getLintRules()) {
             try {
                 if (lintRule.getLevel() != LintLevel.IGNORE) {
-                    Map<JSONFile, List<String>> lintReports = lintRule.lint(filesToLint.toArray(new JSONFile[0]));
+                    Map<JSONFile, List<String>> lintReports = lintRule.lint(filesToLint.toArray(new JSONFile[filesToLint.size()]));
                     if (lintReports.size() != 0) {
                         lintOutput.put(lintRule, lintReports);
                     }
