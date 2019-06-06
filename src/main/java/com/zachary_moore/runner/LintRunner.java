@@ -28,6 +28,8 @@ public class LintRunner {
     private List<String> invalidFilePaths;
     private final LintRegister lintRegister;
 
+    private int exitCode;
+
     /**
      * Create a LintRunner
      * @param lintRegister representation of {@link LintRule} to run against
@@ -89,13 +91,15 @@ public class LintRunner {
             }
         }
         this.lintOutput = lintOutput;
+
+        analyzeLintAndSetExitCode();
     }
 
     /**
      * Check lint output results and return proper exit code
      * @return 0 if no {@link LintRule} report errors and are set to {@link LintLevel#ERROR} else 1
      */
-    public int analyzeLintAndGiveExitCode() {
+    private void analyzeLintAndSetExitCode() {
         if (this.lintOutput == null) {
             throw new RuntimeException("Attempted to analyze lint results before they were computed.");
         }
@@ -103,11 +107,12 @@ public class LintRunner {
         for (Map.Entry<LintRule, Map<JSONFile, List<Error>>> entry: this.lintOutput.entrySet()) {
             if (entry.getKey().getLevel() == LintLevel.ERROR
                     && entry.getValue().size() != 0) {
-                return 1;
+                exitCode = 1;
+                return;
             }
         }
 
-        return 0;
+        exitCode = 0;
     }
 
     public Map<LintRule, Map<JSONFile, List<Error>>> getLintOutput() {
@@ -116,5 +121,9 @@ public class LintRunner {
 
     public List<String> getInvalidFilePaths() {
         return invalidFilePaths;
+    }
+
+    public int getExitCode() {
+        return exitCode;
     }
 }

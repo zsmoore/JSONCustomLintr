@@ -1,18 +1,29 @@
 package com.zachary_moore.runner;
 
+import com.zachary_moore.lint.Error;
+import com.zachary_moore.lint.LintRule;
+import com.zachary_moore.objects.JSONFile;
 import com.zachary_moore.report.Report;
 import j2html.tags.Tag;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
-public class ReportRunner {
+public class ReportGenerator {
 
-    private final LintRunner lintRunner;
+    private final Map<LintRule, Map<JSONFile, List<Error>>> errors;
+    private final List<String> invalidFiles;
+    private final int exitCode;
 
-    public ReportRunner(LintRunner lintRunner) {
-        this.lintRunner = lintRunner;
+    public ReportGenerator(Map<LintRule, Map<JSONFile, List<Error>>> errors,
+        List<String> invalidFiles,
+        int exitCode) {
+        this.errors = errors;
+        this.invalidFiles = invalidFiles;
+        this.exitCode = exitCode;
     }
 
     /**
@@ -21,7 +32,7 @@ public class ReportRunner {
      */
     public void report(String outputPath) {
         Report report = new Report();
-        Tag reportHTML = report.report(lintRunner.getLintOutput());
+        Tag reportHTML = report.report(this.errors);
         if (reportHTML == null) {
             System.exit(0);
         }
@@ -36,6 +47,6 @@ public class ReportRunner {
             throw new RuntimeException(e);
         }
 
-        System.exit(this.lintRunner.analyzeLintAndGiveExitCode());
+        System.exit(exitCode);
     }
 }

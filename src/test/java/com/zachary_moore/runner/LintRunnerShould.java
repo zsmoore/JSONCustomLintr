@@ -53,7 +53,7 @@ public class LintRunnerShould {
     @Test
     public void lintRunnerShouldGiveExitStatus0() {
         this.lintRunner.lint();
-        assert(this.lintRunner.analyzeLintAndGiveExitCode() == 0);
+        assert(this.lintRunner.getExitCode() == 0);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class LintRunnerShould {
         this.lintRegister.register(builder.setLevel(LintLevel.ERROR).build());
         LintRunner lintRunner = new LintRunner(this.lintRegister, "./src/test/resources");
         lintRunner.lint();
-        assert(lintRunner.analyzeLintAndGiveExitCode() == 1);
+        assert(lintRunner.getExitCode() == 1);
     }
 
     @Test
@@ -69,7 +69,7 @@ public class LintRunnerShould {
         lintRegister.register(builder.setLevel(LintLevel.WARNING).build());
         LintRunner lintRunner = new LintRunner(lintRegister, "./src/test/resources");
         lintRunner.lint();
-        assert(lintRunner.analyzeLintAndGiveExitCode() == 0);
+        assert(lintRunner.getExitCode() == 0);
     }
 
     @Test
@@ -77,7 +77,7 @@ public class LintRunnerShould {
        this.lintRegister.register(builder.setLevel(LintLevel.IGNORE).build());
         LintRunner lintRunner = new LintRunner(this.lintRegister, "./src/test/resources");
         lintRunner.lint();
-        assert(lintRunner.analyzeLintAndGiveExitCode() == 0);
+        assert(lintRunner.getExitCode() == 0);
     }
 
     @Test
@@ -93,7 +93,7 @@ public class LintRunnerShould {
 
         Map<LintRule, Map<JSONFile, List<Error>>> lintOutput = lintRunner.getLintOutput();
 
-        assert(lintRunner.analyzeLintAndGiveExitCode() == 1);
+        assert(lintRunner.getExitCode() == 1);
         assert(lintOutput.get(lintRule).size() == 2);
     }
 
@@ -126,7 +126,7 @@ public class LintRunnerShould {
 
         Map<LintRule, Map<JSONFile, List<Error>>> lintOutput = lintRunner.getLintOutput();
 
-        assert(lintRunner.analyzeLintAndGiveExitCode() == 1);
+        assert(lintRunner.getExitCode() == 1);
         assert(lintOutput.get(lintRule).size() == 1);
 
         List<String> exitingPaths = new ArrayList<>();
@@ -170,7 +170,7 @@ public class LintRunnerShould {
 
         Map<LintRule, Map<JSONFile, List<Error>>> lintOutput = lintRunner.getLintOutput();
 
-        assert(lintRunner.analyzeLintAndGiveExitCode() == 1);
+        assert(lintRunner.getExitCode() == 1);
         assert(lintOutput.get(lintRule).size() == 1);
 
         List<String> exitingPaths = new ArrayList<>();
@@ -215,7 +215,7 @@ public class LintRunnerShould {
 
         Map<LintRule, Map<JSONFile, List<Error>>> lintOutput = lintRunner.getLintOutput();
 
-        assert(lintRunner.analyzeLintAndGiveExitCode() == 1);
+        assert(lintRunner.getExitCode() == 1);
         assert(lintOutput.get(lintRule).size() == 1);
 
         List<String> exitingPaths = new ArrayList<>();
@@ -258,7 +258,7 @@ public class LintRunnerShould {
 
     Map<LintRule, Map<JSONFile, List<Error>>> lintOutput = lintRunner.getLintOutput();
 
-    assert(lintRunner.analyzeLintAndGiveExitCode() == 1);
+    assert(lintRunner.getExitCode() == 1);
     assert(lintOutput.get(lintRule).size() == 1);
 
     List<String> exitingPaths = new ArrayList<>();
