@@ -10,9 +10,9 @@ public class WrappedPrimitive<T> implements WrappedObject {
     private final WrappedObject parentObject;
     private final T value;
 
-    public WrappedPrimitive(String originatingKey,
-                     WrappedObject parentObject,
-                     T originalObject) {
+    protected WrappedPrimitive(String originatingKey,
+                               WrappedObject parentObject,
+                               T originalObject) {
         if (originatingKey == null && parentObject != null) {
             this.originatingKey = parentObject.getOriginatingKey();
         } else {
