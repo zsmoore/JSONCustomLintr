@@ -7,6 +7,7 @@ import com.zachary_moore.objects.JSONObject;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 
 public class FilterMapper {
@@ -50,6 +51,8 @@ public class FilterMapper {
             return filters.filterToObjects(jsonFile);
         } else if (lintImplementation.getClazz() == JSONArray.class) {
             return filters.filterToArrays(jsonFile);
+        } else if (lintImplementation.getClazz() == JSONFile.class) {
+            return Collections.singletonList(jsonFile);
         } else {
             return null;
         }

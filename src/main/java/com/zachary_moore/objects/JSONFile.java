@@ -1,5 +1,6 @@
 package com.zachary_moore.objects;
 
+import org.apache.commons.io.FilenameUtils;
 import org.json.JSONException;
 import org.json.JSONTokener;
 
@@ -10,23 +11,33 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JSONFile {
+public class JSONFile implements WrappedObject {
 
-    private org.json.JSONObject jsonObject;
-    private org.json.JSONArray jsonArray;
+    private JSONObject wrappedJsonObject;
+    private JSONArray wrappedJsonArray;
     private String filePath;
+    private String fileExtension;
     private List<String> linesInFile;
 
     public JSONFile(File file) throws IOException {
         filePath = file.getCanonicalPath();
+        fileExtension = FilenameUtils.getExtension(filePath);
         initializeLineNumberData(file);
+        initializeWrappedObjects(file);
+    }
+
+    private void initializeWrappedObjects(File file) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
         JSONTokener jsonTokener = new JSONTokener(bufferedReader);
         try {
-            jsonObject = new org.json.JSONObject(jsonTokener);
+            this.wrappedJsonObject = new JSONObject(null,
+                    this,
+                    new org.json.JSONObject(jsonTokener));
         } catch (JSONException e) {
             jsonTokener.back();
-            jsonArray = new org.json.JSONArray(jsonTokener);
+            this.wrappedJsonArray = new JSONArray(null,
+                    this,
+                    new org.json.JSONArray(jsonTokener));
         }
         bufferedReader.close();
     }
@@ -34,18 +45,34 @@ public class JSONFile {
     /**
      * @return either {@link JSONObject} or {@link JSONArray} based on input file to constructor
      */
-    public Object getObject() {
-        if (jsonObject != null) {
-            return new JSONObject(null, null, jsonObject);
-        } else if (jsonArray != null) {
-            return new JSONArray(null, null, jsonArray);
-        } else {
-            throw new RuntimeException("Could not parse either a JSONArray or JSONObject from file");
-        }
+    public WrappedObject getChild() {
+        return wrappedJsonObject != null ? wrappedJsonObject : wrappedJsonArray;
+    }
+
+    @Override
+    public String getOriginatingKey() {
+        return null;
+    }
+
+    @Override
+    public WrappedObject getParentObject() {
+        return null;
+    }
+
+    @Override
+    public void parseAndReplaceWithWrappers() { }
+
+    @Override
+    public boolean isPrimitive() {
+        return false;
     }
 
     public String getFilePath() {
         return filePath;
+    }
+
+    public String getFileExtension() {
+        return fileExtension;
     }
 
     private void initializeLineNumberData(File file) throws IOException{
