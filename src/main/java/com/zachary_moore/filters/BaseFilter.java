@@ -23,7 +23,7 @@ class BaseFilter {
      * @return {@link ArrayList<T>} of given class type from JSONFile
      */
     <T> List<T> getAllOfType(JSONFile file, Class<T> clazz) {
-        Object baseObject = file.getObject();
+        Object baseObject = file.getChild();
         if (baseObject instanceof JSONObject) {
             return accumulateType((JSONObject) baseObject, clazz);
         } else if (baseObject instanceof JSONArray){
@@ -42,7 +42,7 @@ class BaseFilter {
      */
     <T> List<WrappedPrimitive<T>> getAllOfWrappedType(JSONFile file, Class<T> clazz) {
         ArrayList<WrappedPrimitive<T>> wrappedTypeList = new ArrayList<>();
-        Object baseObject = file.getObject();
+        Object baseObject = file.getChild();
         if (baseObject instanceof JSONObject) {
             wrappedTypeList.addAll(accumulateWrappedTypeFromEntrySet(((JSONObject) baseObject).toMap().entrySet(), clazz));
         } else if (baseObject instanceof JSONArray) {
