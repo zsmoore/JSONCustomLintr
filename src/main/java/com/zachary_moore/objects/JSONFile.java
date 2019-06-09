@@ -87,7 +87,7 @@ public class JSONFile implements WrappedObject {
     public int getLineNumber(String offendingText) {
         for (int i = 0; i < linesInFile.size(); i++) {
             if (linesInFile.get(i).contains(offendingText)) {
-                return i;
+                return i + 1;
             }
         }
         return -1;

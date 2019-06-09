@@ -1,4 +1,4 @@
-package com.zachary_moore.runner;
+package com.zachary_moore.overall;
 
 import com.zachary_moore.lint.LintImplementation;
 import com.zachary_moore.lint.LintLevel;
@@ -7,6 +7,7 @@ import com.zachary_moore.lint.LintRule;
 import com.zachary_moore.objects.JSONFile;
 import com.zachary_moore.objects.JSONObject;
 import com.zachary_moore.objects.WrappedObject;
+import com.zachary_moore.runner.LintRunner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
