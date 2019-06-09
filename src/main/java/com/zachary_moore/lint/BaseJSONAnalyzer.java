@@ -1,9 +1,6 @@
 package com.zachary_moore.lint;
 
-import com.zachary_moore.objects.JSONArray;
-import com.zachary_moore.objects.JSONObject;
-import com.zachary_moore.objects.WrappedObject;
-import com.zachary_moore.objects.WrappedPrimitive;
+import com.zachary_moore.objects.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -212,5 +209,16 @@ public abstract class BaseJSONAnalyzer {
      */
     protected boolean reduceBooleans(Boolean... booleans) {
         return Arrays.stream(booleans).filter(b -> !b).count() == 0;
+    }
+
+    protected int getLineNumber(String offendingText, WrappedObject originatingObject) {
+        if (originatingObject == null) {
+            return -1;
+        }
+        if (originatingObject instanceof JSONFile) {
+            return ((JSONFile) originatingObject).getLineNumber(offendingText);
+        } else {
+            return getLineNumber(offendingText, originatingObject.getParentObject());
+        }
     }
 }
