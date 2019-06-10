@@ -1,5 +1,6 @@
 package com.zachary_moore.report;
 
+import com.zachary_moore.lint.LintError;
 import j2html.tags.Tag;
 import com.zachary_moore.lint.LintRule;
 import com.zachary_moore.objects.JSONFile;
@@ -26,7 +27,7 @@ public class Report {
      * @param lintOutput output from a {@link com.zachary_moore.runner.LintRunner} to generate based off of
      * @return HTML representation
      */
-    public Tag report(Map<LintRule, Map<JSONFile, List<String>>> lintOutput) {
+    public Tag report(Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput) {
         if (lintOutput.size() == 0) {
             return null;
         }
@@ -37,7 +38,7 @@ public class Report {
                     footerSection.getFooter()).withClasses("container-fluid", "bg-info")).withClass("bg-info");
     }
 
-    private Tag getAllLintRulesSection(Map<LintRule, Map<JSONFile, List<String>>> lintOutput) {
+    private Tag getAllLintRulesSection(Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput) {
         return div(
             hr().attr("width", "0%"),
             each(lintOutput, this.lintRuleSection::getLintRuleSection

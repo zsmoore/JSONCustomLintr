@@ -1,12 +1,16 @@
 package com.zachary_moore.lint;
 
 import com.zachary_moore.filters.FilterMapper;
+import com.zachary_moore.objects.JSONArray;
 import com.zachary_moore.objects.JSONFile;
-
+import com.zachary_moore.objects.WrappedObject;
+import com.zachary_moore.objects.WrappedObjectHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
+
 
 /**
  * Class to represent a lint rule configuration
@@ -38,21 +42,27 @@ public class LintRule {
      * @throws LintImplementation.NoReportSetException if there was no report set during runtime of our {@link LintImplementation}'s report
      */
     @SuppressWarnings("unchecked")
-    public Map<JSONFile, List<String>> lint(JSONFile ...jsonFiles) throws LintImplementation.NoReportSetException{
-        Map<JSONFile, List<String>> reportMessages = new HashMap<>();
+    public Map<JSONFile, List<LintError>> lint(JSONFile ...jsonFiles) throws LintImplementation.NoReportSetException{
+        Map<JSONFile, List<LintError>> reportMessages = new HashMap<>();
+
         for (JSONFile file: jsonFiles) {
 
-            List<?> filteredList = FilterMapper.filter(file, implementation);
+            List<? extends WrappedObject> filteredList = FilterMapper.filter(file, implementation);
             if (filteredList == null) {
                 return null;
             }
 
-            for (Object element : filteredList) {
+            for (WrappedObject element : filteredList) {
                 if (implementation.shouldReport(element)) {
+                    String path = WrappedObjectHelper.getPath(element);
                     if (!reportMessages.containsKey(file)) {
                         reportMessages.put(file, new ArrayList<>());
                     }
-                    reportMessages.get(file).add(implementation.report(element));
+                    reportMessages.get(file)
+                        .add(new LintError.Builder()
+                            .setJsonPath(path)
+                            .setMessage(implementation.report(element))
+                            .build());
                 }
             }
         }

@@ -1,11 +1,16 @@
 package com.zachary_moore.runner;
 
+import com.zachary_moore.lint.LintError;
 import com.zachary_moore.lint.LintImplementation;
 import com.zachary_moore.lint.LintLevel;
 import com.zachary_moore.lint.LintRegister;
 import com.zachary_moore.lint.LintRule;
+import com.zachary_moore.objects.JSONArray;
 import com.zachary_moore.objects.JSONFile;
+import com.zachary_moore.objects.JSONObject;
 import com.zachary_moore.objects.WrappedPrimitive;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,14 +46,14 @@ public class LintRunnerShould {
 
     @Test
     public void testNoLintReport() {
-        Map<LintRule, Map<JSONFile, List<String>>> lintOutput = lintRunner.lint();
-        assert(lintOutput.size() == 0);
+        lintRunner.lint();
+        assert(lintRunner.getLintOutput().size() == 0);
     }
 
     @Test
     public void lintRunnerShouldGiveExitStatus0() {
         this.lintRunner.lint();
-        assert(this.lintRunner.analyzeLintAndGiveExitCode() == 0);
+        assert(this.lintRunner.getExitCode() == 0);
     }
 
     @Test
@@ -56,7 +61,7 @@ public class LintRunnerShould {
         this.lintRegister.register(builder.setLevel(LintLevel.ERROR).build());
         LintRunner lintRunner = new LintRunner(this.lintRegister, "./src/test/resources");
         lintRunner.lint();
-        assert(lintRunner.analyzeLintAndGiveExitCode() == 1);
+        assert(lintRunner.getExitCode() == 1);
     }
 
     @Test
@@ -64,7 +69,7 @@ public class LintRunnerShould {
         lintRegister.register(builder.setLevel(LintLevel.WARNING).build());
         LintRunner lintRunner = new LintRunner(lintRegister, "./src/test/resources");
         lintRunner.lint();
-        assert(lintRunner.analyzeLintAndGiveExitCode() == 0);
+        assert(lintRunner.getExitCode() == 0);
     }
 
     @Test
@@ -72,7 +77,7 @@ public class LintRunnerShould {
        this.lintRegister.register(builder.setLevel(LintLevel.IGNORE).build());
         LintRunner lintRunner = new LintRunner(this.lintRegister, "./src/test/resources");
         lintRunner.lint();
-        assert(lintRunner.analyzeLintAndGiveExitCode() == 0);
+        assert(lintRunner.getExitCode() == 0);
     }
 
     @Test
@@ -82,11 +87,195 @@ public class LintRunnerShould {
         LintRunner lintRunner =
                 new LintRunner(
                         this.lintRegister,
-                        "./src/test/resources/test-2.json",
-                        "./src/test/resources/test-file.pdsc");
-        Map<LintRule, Map<JSONFile, List<String>>> lintOutput = lintRunner.lint();
+                    "./src/test/resources/test-2.json",
+                    "./src/test/resources/test-file.pdsc");
+        lintRunner.lint();
 
-        assert(lintRunner.analyzeLintAndGiveExitCode() == 1);
+        Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput = lintRunner.getLintOutput();
+
+        assert(lintRunner.getExitCode() == 1);
         assert(lintOutput.get(lintRule).size() == 2);
     }
+
+    @Test
+    public void lintRunnerShouldValidErrorForWrappedPrimitive() throws Exception {
+        LintRule lintRule = new LintRule.Builder()
+            .setImplementation(new LintImplementation<WrappedPrimitive<String>>() {
+                @Override
+                public Class<?> getClazz() {
+                    return String.class;
+                }
+
+                @Override
+                public boolean shouldReport(WrappedPrimitive<String> stringWrappedPrimitive) {
+                    this.setReportMessage(stringWrappedPrimitive.toString());
+                    return true;
+                }
+            })
+            .setIssueId("")
+            .setLevel(LintLevel.ERROR)
+            .build();
+
+        lintRegister.register(lintRule);
+        LintRunner lintRunner =
+            new LintRunner(
+                lintRegister,
+                "./src/test/resources/test-3.json");
+        lintRunner.lint();
+
+        Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput = lintRunner.getLintOutput();
+
+        assert(lintRunner.getExitCode() == 1);
+        assert(lintOutput.get(lintRule).size() == 1);
+
+        List<String> exitingPaths = new ArrayList<>();
+        lintOutput.get(lintRule).values().forEach(k -> k.forEach(k1 -> exitingPaths.add(k1.getJsonPath())));
+        assert(exitingPaths.size() == 4);
+
+        List<String> validPaths = Arrays.asList(
+            "test_1_label",
+            "test_2_label",
+            "test_3_label.test_3_1_label.test_3_1_1_label.test_3_1_1_1_label",
+            "test_3_label.test_3_2_label.test_3_2_1_label");
+        assert(exitingPaths.containsAll(validPaths));
+    }
+
+    @Test
+    public void lintRunnerShouldValidErrorForJSONObject() throws Exception {
+        LintRule lintRule = new LintRule.Builder()
+            .setImplementation(new LintImplementation<JSONObject>() {
+                @Override
+                public Class<?> getClazz() {
+                    return JSONObject.class;
+                }
+
+                @Override
+                public boolean shouldReport(JSONObject jsonObject) {
+                    this.setReportMessage(jsonObject.toString());
+                    return true;
+                }
+            })
+            .setIssueId("")
+            .setLevel(LintLevel.ERROR)
+            .build();
+
+        lintRegister.register(lintRule);
+        LintRunner lintRunner =
+            new LintRunner(
+                lintRegister,
+                "./src/test/resources/test-3.json");
+        lintRunner.lint();
+
+        Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput = lintRunner.getLintOutput();
+
+        assert(lintRunner.getExitCode() == 1);
+        assert(lintOutput.get(lintRule).size() == 1);
+
+        List<String> exitingPaths = new ArrayList<>();
+        lintOutput.get(lintRule).values().forEach(k -> k.forEach(k1 -> exitingPaths.add(k1.getJsonPath())));
+        assert(exitingPaths.size() == 5);
+
+        List<String> validPaths = Arrays.asList(
+            "",
+            "test_3_label",
+            "test_3_label.test_3_1_label",
+            "test_3_label.test_3_1_label.test_3_1_1_label",
+            "test_3_label.test_3_2_label");
+        assert(exitingPaths.containsAll(validPaths));
+    }
+
+    @Test
+    public void lintRunnerShouldValidErrorForJSONArray() throws Exception {
+        LintRule lintRule = new LintRule.Builder()
+            .setImplementation(new LintImplementation<JSONArray>() {
+                @Override
+                public Class<?> getClazz() {
+                    return JSONArray.class;
+                }
+
+                @Override
+                public boolean shouldReport(JSONArray jsonArray) {
+                    this.setReportMessage(jsonArray.toString());
+                    return true;
+                }
+            })
+            .setIssueId("")
+            .setLevel(LintLevel.ERROR)
+            .build();
+
+        lintRegister.register(lintRule);
+        LintRunner lintRunner =
+            new LintRunner(
+                lintRegister,
+                "./src/test/resources/test-5.json");
+        lintRunner.lint();
+
+        Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput = lintRunner.getLintOutput();
+
+        assert(lintRunner.getExitCode() == 1);
+        assert(lintOutput.get(lintRule).size() == 1);
+
+        List<String> exitingPaths = new ArrayList<>();
+        lintOutput.get(lintRule).values().forEach(k -> k.forEach(k1 -> exitingPaths.add(k1.getJsonPath())));
+        assert(exitingPaths.size() == 4);
+
+        List<String> validPaths = Arrays.asList(
+            "test_3_label",
+            "test_3_label.0.test_3_1_label",
+            "test_3_label.0.test_3_1_label.0.test_3_1_1_label.test_3_1_1_2_label",
+            "test_3_label.2.test_4_1_label");
+        assert(exitingPaths.containsAll(validPaths));
+    }
+
+  @Test
+  public void lintRunnerShouldValidErrorForJSONObjectWithArray() throws Exception {
+    LintRule lintRule = new LintRule.Builder()
+        .setImplementation(new LintImplementation<JSONObject>() {
+          @Override
+          public Class<?> getClazz() {
+            return JSONObject.class;
+          }
+
+          @Override
+          public boolean shouldReport(JSONObject jsonObject) {
+            this.setReportMessage(jsonObject.toString());
+            return true;
+          }
+        })
+        .setIssueId("")
+        .setLevel(LintLevel.ERROR)
+        .build();
+
+    lintRegister.register(lintRule);
+    LintRunner lintRunner =
+        new LintRunner(
+            lintRegister,
+            "./src/test/resources/test-5.json");
+    lintRunner.lint();
+
+    Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput = lintRunner.getLintOutput();
+
+    assert(lintRunner.getExitCode() == 1);
+    assert(lintOutput.get(lintRule).size() == 1);
+
+    List<String> exitingPaths = new ArrayList<>();
+    lintOutput.get(lintRule).values().forEach(k -> k.forEach(k1 -> exitingPaths.add(k1.getJsonPath())));
+    assert(exitingPaths.size() == 13);
+
+    List<String> validPaths = Arrays.asList(
+        "",
+        "test_3_label.0",
+        "test_3_label.0.test_3_1_label.0",
+        "test_3_label.0.test_3_1_label.0.test_3_1_1_label",
+        "test_3_label.0.test_3_1_label.1",
+        "test_3_label.0.test_3_1_label.1.test_3_1_2_label",
+        "test_3_label.1",
+        "test_3_label.1.test_3_2_label",
+        "test_3_label.2",
+        "test_3_label.2.test_4_1_label.0",
+        "test_3_label.2.test_4_1_label.0.test_4_1_1_label",
+        "test_3_label.2.test_4_1_label.1",
+        "test_3_label.2.test_4_1_label.1.test_4_1_2_label");
+    assert(exitingPaths.containsAll(validPaths));
+  }
 }

@@ -1,5 +1,6 @@
 package com.zachary_moore.runner;
 
+import com.zachary_moore.lint.LintError;
 import com.zachary_moore.lint.LintImplementation;
 import com.zachary_moore.lint.LintLevel;
 import com.zachary_moore.lint.LintRegister;
@@ -7,6 +8,7 @@ import com.zachary_moore.lint.LintRule;
 import com.zachary_moore.objects.JSONFile;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -21,8 +23,12 @@ import org.apache.commons.io.FileUtils;
 public class LintRunner {
 
     private String[] basePaths;
-    private Map<LintRule, Map<JSONFile, List<String>>> lintOutput;
+    private Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput;
+
+    private List<String> invalidFilePaths;
     private final LintRegister lintRegister;
+
+    private int exitCode;
 
     /**
      * Create a LintRunner
@@ -33,6 +39,7 @@ public class LintRunner {
                       String... basePaths) {
         this.lintRegister = lintRegister;
         this.basePaths = basePaths;
+        this.invalidFilePaths = new ArrayList<>();
     }
 
     private Set<JSONFile> getFilesToLint() {
@@ -48,6 +55,7 @@ public class LintRunner {
             } else {
                 // TODO: Add proper logging
                 Logger.getGlobal().warning(basePath + " is not a valid file path");
+                invalidFilePaths.add(basePath);
             }
         }
 
@@ -65,14 +73,14 @@ public class LintRunner {
      * Lint all files in given path in constructor and store the output
      * @return Representation of any lint issues
      */
-    public Map<LintRule, Map<JSONFile, List<String>>> lint() {
-        Map<LintRule, Map<JSONFile, List<String>>> lintOutput = new HashMap<>();
+    public void lint() {
+        Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput = new HashMap<>();
         Set<JSONFile> filesToLint = getFilesToLint();
 
         for (LintRule lintRule : lintRegister.getLintRules()) {
             try {
                 if (lintRule.getLevel() != LintLevel.IGNORE) {
-                    Map<JSONFile, List<String>> lintReports = lintRule.lint(filesToLint.toArray(new JSONFile[0]));
+                    Map<JSONFile, List<LintError>> lintReports = lintRule.lint(filesToLint.toArray(new JSONFile[0]));
                     if (lintReports.size() != 0) {
                         lintOutput.put(lintRule, lintReports);
                     }
@@ -84,25 +92,38 @@ public class LintRunner {
         }
         this.lintOutput = lintOutput;
 
-        return lintOutput;
+        analyzeLintAndSetExitCode();
     }
 
     /**
      * Check lint output results and return proper exit code
      * @return 0 if no {@link LintRule} report errors and are set to {@link LintLevel#ERROR} else 1
      */
-    public int analyzeLintAndGiveExitCode() {
+    private void analyzeLintAndSetExitCode() {
         if (this.lintOutput == null) {
             throw new RuntimeException("Attempted to analyze lint results before they were computed.");
         }
 
-        for (Map.Entry<LintRule, Map<JSONFile, List<String>>> entry: this.lintOutput.entrySet()) {
+        for (Map.Entry<LintRule, Map<JSONFile, List<LintError>>> entry: this.lintOutput.entrySet()) {
             if (entry.getKey().getLevel() == LintLevel.ERROR
                     && entry.getValue().size() != 0) {
-                return 1;
+                exitCode = 1;
+                return;
             }
         }
 
-        return 0;
+        exitCode = 0;
+    }
+
+    public Map<LintRule, Map<JSONFile, List<LintError>>> getLintOutput() {
+        return lintOutput;
+    }
+
+    public List<String> getInvalidFilePaths() {
+        return invalidFilePaths;
+    }
+
+    public int getExitCode() {
+        return exitCode;
     }
 }

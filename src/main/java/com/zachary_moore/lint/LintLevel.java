@@ -9,11 +9,11 @@ public enum LintLevel {
      */
     IGNORE,
     /**
-     * Will be reported by LintRunnner but not fail ReportRunner
+     * Will be reported by LintRunnner but not fail ReportGenerator
      */
     WARNING,
     /**
-     * Will be reported by LintRunner and fail ReportRunner
+     * Will be reported by LintRunner and fail ReportGenerator
      */
     ERROR
 }
