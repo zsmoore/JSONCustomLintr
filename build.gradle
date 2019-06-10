@@ -17,7 +17,7 @@ def sonatypeUsername = hasProperty('sonatypeUsername') ? sonatypeUsername : 'use
 def sonatypePassword = hasProperty('sonatypePassword') ? sonatypePassword : 'password'
 
 group = 'com.zachary-moore'
-version = '1.0.0'
+version = '1.1.0'
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
