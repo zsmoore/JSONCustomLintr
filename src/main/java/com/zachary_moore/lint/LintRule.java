@@ -3,9 +3,8 @@ package com.zachary_moore.lint;
 import com.zachary_moore.filters.FilterMapper;
 import com.zachary_moore.objects.JSONArray;
 import com.zachary_moore.objects.JSONFile;
-
-import com.zachary_moore.objects.JSONObject;
 import com.zachary_moore.objects.WrappedObject;
+import com.zachary_moore.objects.WrappedObjectHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,8 +42,8 @@ public class LintRule {
      * @throws LintImplementation.NoReportSetException if there was no report set during runtime of our {@link LintImplementation}'s report
      */
     @SuppressWarnings("unchecked")
-    public Map<JSONFile, List<Error>> lint(JSONFile ...jsonFiles) throws LintImplementation.NoReportSetException{
-        Map<JSONFile, List<Error>> reportMessages = new HashMap<>();
+    public Map<JSONFile, List<LintError>> lint(JSONFile ...jsonFiles) throws LintImplementation.NoReportSetException{
+        Map<JSONFile, List<LintError>> reportMessages = new HashMap<>();
 
         for (JSONFile file: jsonFiles) {
 
@@ -55,36 +54,20 @@ public class LintRule {
 
             for (WrappedObject element : filteredList) {
                 if (implementation.shouldReport(element)) {
-                    String path = getPath(element);
+                    String path = WrappedObjectHelper.getPath(element);
                     if (!reportMessages.containsKey(file)) {
                         reportMessages.put(file, new ArrayList<>());
                     }
-                    reportMessages.get(file).add(new Error(path, implementation.report(element)));
+                    reportMessages.get(file)
+                        .add(new LintError.Builder()
+                            .setJsonPath(path)
+                            .setMessage(implementation.report(element))
+                            .build());
                 }
             }
         }
 
         return reportMessages;
-    }
-
-    private String getPath(WrappedObject element) {
-        if (element.getParentObject() == null)
-            return "";
-
-        if (element.getParentObject() instanceof JSONArray) {
-            return String.join(".", getPath(element.getParentObject()), getArrayIndex(element) +  "");
-
-        }
-
-        String path = getPath(element.getParentObject());
-        if (StringUtils.isNotBlank(path))
-            path += ".";
-
-        return path + element.getOriginatingKey();
-    }
-
-    private int getArrayIndex(WrappedObject element) {
-        return ((JSONArray)element.getParentObject()).toList().indexOf(element);
     }
 
     public LintLevel getLevel() {

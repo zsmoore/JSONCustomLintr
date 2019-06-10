@@ -1,6 +1,6 @@
 package com.zachary_moore.runner;
 
-import com.zachary_moore.lint.Error;
+import com.zachary_moore.lint.LintError;
 import com.zachary_moore.lint.LintRule;
 import com.zachary_moore.objects.JSONFile;
 import com.zachary_moore.report.Report;
@@ -14,11 +14,11 @@ import java.util.logging.Logger;
 
 public class ReportGenerator {
 
-    private final Map<LintRule, Map<JSONFile, List<Error>>> errors;
+    private final Map<LintRule, Map<JSONFile, List<LintError>>> errors;
     private final List<String> invalidFiles;
     private final int exitCode;
 
-    public ReportGenerator(Map<LintRule, Map<JSONFile, List<Error>>> errors,
+    public ReportGenerator(Map<LintRule, Map<JSONFile, List<LintError>>> errors,
         List<String> invalidFiles,
         int exitCode) {
         this.errors = errors;

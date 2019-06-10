@@ -34,7 +34,7 @@ public abstract class LintImplementation<T> extends BaseJSONAnalyzer {
      */
     public String report(T t) throws NoReportSetException {
         if (reportMessage == null) {
-            throw new NoReportSetException("No Report Message Set When Lint Error Found");
+            throw new NoReportSetException("No Report Message Set When Lint LintError Found");
         }
         return reportMessage;
     }

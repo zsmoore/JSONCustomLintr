@@ -1,6 +1,6 @@
 package com.zachary_moore.runner;
 
-import com.zachary_moore.lint.Error;
+import com.zachary_moore.lint.LintError;
 import com.zachary_moore.lint.LintImplementation;
 import com.zachary_moore.lint.LintLevel;
 import com.zachary_moore.lint.LintRegister;
@@ -91,7 +91,7 @@ public class LintRunnerShould {
                     "./src/test/resources/test-file.pdsc");
         lintRunner.lint();
 
-        Map<LintRule, Map<JSONFile, List<Error>>> lintOutput = lintRunner.getLintOutput();
+        Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput = lintRunner.getLintOutput();
 
         assert(lintRunner.getExitCode() == 1);
         assert(lintOutput.get(lintRule).size() == 2);
@@ -116,7 +116,6 @@ public class LintRunnerShould {
             .setLevel(LintLevel.ERROR)
             .build();
 
-        LintRegister lintRegister = new LintRegister();
         lintRegister.register(lintRule);
         LintRunner lintRunner =
             new LintRunner(
@@ -124,13 +123,13 @@ public class LintRunnerShould {
                 "./src/test/resources/test-3.json");
         lintRunner.lint();
 
-        Map<LintRule, Map<JSONFile, List<Error>>> lintOutput = lintRunner.getLintOutput();
+        Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput = lintRunner.getLintOutput();
 
         assert(lintRunner.getExitCode() == 1);
         assert(lintOutput.get(lintRule).size() == 1);
 
         List<String> exitingPaths = new ArrayList<>();
-        lintOutput.get(lintRule).values().forEach(k -> k.forEach(k1 -> exitingPaths.add(k1.getPath())));
+        lintOutput.get(lintRule).values().forEach(k -> k.forEach(k1 -> exitingPaths.add(k1.getJsonPath())));
         assert(exitingPaths.size() == 4);
 
         List<String> validPaths = Arrays.asList(
@@ -160,7 +159,6 @@ public class LintRunnerShould {
             .setLevel(LintLevel.ERROR)
             .build();
 
-        LintRegister lintRegister = new LintRegister();
         lintRegister.register(lintRule);
         LintRunner lintRunner =
             new LintRunner(
@@ -168,13 +166,13 @@ public class LintRunnerShould {
                 "./src/test/resources/test-3.json");
         lintRunner.lint();
 
-        Map<LintRule, Map<JSONFile, List<Error>>> lintOutput = lintRunner.getLintOutput();
+        Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput = lintRunner.getLintOutput();
 
         assert(lintRunner.getExitCode() == 1);
         assert(lintOutput.get(lintRule).size() == 1);
 
         List<String> exitingPaths = new ArrayList<>();
-        lintOutput.get(lintRule).values().forEach(k -> k.forEach(k1 -> exitingPaths.add(k1.getPath())));
+        lintOutput.get(lintRule).values().forEach(k -> k.forEach(k1 -> exitingPaths.add(k1.getJsonPath())));
         assert(exitingPaths.size() == 5);
 
         List<String> validPaths = Arrays.asList(
@@ -205,7 +203,6 @@ public class LintRunnerShould {
             .setLevel(LintLevel.ERROR)
             .build();
 
-        LintRegister lintRegister = new LintRegister();
         lintRegister.register(lintRule);
         LintRunner lintRunner =
             new LintRunner(
@@ -213,13 +210,13 @@ public class LintRunnerShould {
                 "./src/test/resources/test-5.json");
         lintRunner.lint();
 
-        Map<LintRule, Map<JSONFile, List<Error>>> lintOutput = lintRunner.getLintOutput();
+        Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput = lintRunner.getLintOutput();
 
         assert(lintRunner.getExitCode() == 1);
         assert(lintOutput.get(lintRule).size() == 1);
 
         List<String> exitingPaths = new ArrayList<>();
-        lintOutput.get(lintRule).values().forEach(k -> k.forEach(k1 -> exitingPaths.add(k1.getPath())));
+        lintOutput.get(lintRule).values().forEach(k -> k.forEach(k1 -> exitingPaths.add(k1.getJsonPath())));
         assert(exitingPaths.size() == 4);
 
         List<String> validPaths = Arrays.asList(
@@ -249,7 +246,6 @@ public class LintRunnerShould {
         .setLevel(LintLevel.ERROR)
         .build();
 
-    LintRegister lintRegister = new LintRegister();
     lintRegister.register(lintRule);
     LintRunner lintRunner =
         new LintRunner(
@@ -257,13 +253,13 @@ public class LintRunnerShould {
             "./src/test/resources/test-5.json");
     lintRunner.lint();
 
-    Map<LintRule, Map<JSONFile, List<Error>>> lintOutput = lintRunner.getLintOutput();
+    Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput = lintRunner.getLintOutput();
 
     assert(lintRunner.getExitCode() == 1);
     assert(lintOutput.get(lintRule).size() == 1);
 
     List<String> exitingPaths = new ArrayList<>();
-    lintOutput.get(lintRule).values().forEach(k -> k.forEach(k1 -> exitingPaths.add(k1.getPath())));
+    lintOutput.get(lintRule).values().forEach(k -> k.forEach(k1 -> exitingPaths.add(k1.getJsonPath())));
     assert(exitingPaths.size() == 13);
 
     List<String> validPaths = Arrays.asList(

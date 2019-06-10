@@ -1,6 +1,6 @@
 package com.zachary_moore.report;
 
-import com.zachary_moore.lint.Error;
+import com.zachary_moore.lint.LintError;
 import j2html.tags.Tag;
 import com.zachary_moore.lint.LintRule;
 import com.zachary_moore.objects.JSONFile;
@@ -12,7 +12,7 @@ import static j2html.TagCreator.*;
 
 class ReportSummary {
 
-    Tag getReportSummaryHeader(Map<LintRule, Map<JSONFile, List<Error>>> lintOutput) {
+    Tag getReportSummaryHeader(Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput) {
         return header(
                     getHeader(),
                     div(
@@ -36,10 +36,10 @@ class ReportSummary {
                 ).withClasses("bg-info", "container-fluid");
     }
 
-    private Tag summarizeLintRule(Map.Entry<LintRule, Map<JSONFile, List<Error>>> inputPair) {
+    private Tag summarizeLintRule(Map.Entry<LintRule, Map<JSONFile, List<LintError>>> inputPair) {
         int numFileIssues = inputPair.getValue().size();
         int numTotalIssues = 0;
-        for (Map.Entry<JSONFile, List<Error>> fileIssuePair: inputPair.getValue().entrySet()) {
+        for (Map.Entry<JSONFile, List<LintError>> fileIssuePair: inputPair.getValue().entrySet()) {
             numTotalIssues += fileIssuePair.getValue().size();
         }
         return tr(

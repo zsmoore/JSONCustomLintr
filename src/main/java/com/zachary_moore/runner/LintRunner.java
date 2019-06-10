@@ -1,6 +1,6 @@
 package com.zachary_moore.runner;
 
-import com.zachary_moore.lint.Error;
+import com.zachary_moore.lint.LintError;
 import com.zachary_moore.lint.LintImplementation;
 import com.zachary_moore.lint.LintLevel;
 import com.zachary_moore.lint.LintRegister;
@@ -23,7 +23,7 @@ import org.apache.commons.io.FileUtils;
 public class LintRunner {
 
     private String[] basePaths;
-    private Map<LintRule, Map<JSONFile, List<Error>>> lintOutput;
+    private Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput;
 
     private List<String> invalidFilePaths;
     private final LintRegister lintRegister;
@@ -74,13 +74,13 @@ public class LintRunner {
      * @return Representation of any lint issues
      */
     public void lint() {
-        Map<LintRule, Map<JSONFile, List<Error>>> lintOutput = new HashMap<>();
+        Map<LintRule, Map<JSONFile, List<LintError>>> lintOutput = new HashMap<>();
         Set<JSONFile> filesToLint = getFilesToLint();
 
         for (LintRule lintRule : lintRegister.getLintRules()) {
             try {
                 if (lintRule.getLevel() != LintLevel.IGNORE) {
-                    Map<JSONFile, List<Error>> lintReports = lintRule.lint(filesToLint.toArray(new JSONFile[0]));
+                    Map<JSONFile, List<LintError>> lintReports = lintRule.lint(filesToLint.toArray(new JSONFile[0]));
                     if (lintReports.size() != 0) {
                         lintOutput.put(lintRule, lintReports);
                     }
@@ -104,7 +104,7 @@ public class LintRunner {
             throw new RuntimeException("Attempted to analyze lint results before they were computed.");
         }
 
-        for (Map.Entry<LintRule, Map<JSONFile, List<Error>>> entry: this.lintOutput.entrySet()) {
+        for (Map.Entry<LintRule, Map<JSONFile, List<LintError>>> entry: this.lintOutput.entrySet()) {
             if (entry.getKey().getLevel() == LintLevel.ERROR
                     && entry.getValue().size() != 0) {
                 exitCode = 1;
@@ -115,7 +115,7 @@ public class LintRunner {
         exitCode = 0;
     }
 
-    public Map<LintRule, Map<JSONFile, List<Error>>> getLintOutput() {
+    public Map<LintRule, Map<JSONFile, List<LintError>>> getLintOutput() {
         return lintOutput;
     }
 

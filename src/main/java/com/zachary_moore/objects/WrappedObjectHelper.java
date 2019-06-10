@@ -1,6 +1,9 @@
 package com.zachary_moore.objects;
 
-class WrappedObjectHelper {
+import org.apache.commons.lang3.StringUtils;
+
+
+public class WrappedObjectHelper {
 
     private WrappedObjectHelper(){}
 
@@ -29,4 +32,25 @@ class WrappedObjectHelper {
         }
         return wrappedObject;
     }
+
+    public static String getPath(WrappedObject element) {
+        if (element.getParentObject() == null)
+            return "";
+
+        if (element.getParentObject() instanceof JSONArray) {
+            return String.join(".", getPath(element.getParentObject()), getArrayIndex(element) +  "");
+
+        }
+
+        String path = getPath(element.getParentObject());
+        if (StringUtils.isNotBlank(path))
+            path += ".";
+
+        return path + element.getOriginatingKey();
+    }
+
+    private static int getArrayIndex(WrappedObject element) {
+        return ((JSONArray)element.getParentObject()).toList().indexOf(element);
+    }
+
 }
