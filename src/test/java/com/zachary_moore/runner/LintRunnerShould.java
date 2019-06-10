@@ -210,7 +210,7 @@ public class LintRunnerShould {
         LintRunner lintRunner =
             new LintRunner(
                 lintRegister,
-                "./src/test/resources/test-4.json");
+                "./src/test/resources/test-5.json");
         lintRunner.lint();
 
         Map<LintRule, Map<JSONFile, List<Error>>> lintOutput = lintRunner.getLintOutput();
@@ -220,12 +220,13 @@ public class LintRunnerShould {
 
         List<String> exitingPaths = new ArrayList<>();
         lintOutput.get(lintRule).values().forEach(k -> k.forEach(k1 -> exitingPaths.add(k1.getPath())));
-        assert(exitingPaths.size() == 2);
+        assert(exitingPaths.size() == 4);
 
-        //TODO: Fix this
         List<String> validPaths = Arrays.asList(
             "test_3_label",
-            "test_3_label.test_3_1_label");
+            "test_3_label.0.test_3_1_label",
+            "test_3_label.0.test_3_1_label.0.test_3_1_1_label.test_3_1_1_2_label",
+            "test_3_label.2.test_4_1_label");
         assert(exitingPaths.containsAll(validPaths));
     }
 
@@ -253,7 +254,7 @@ public class LintRunnerShould {
     LintRunner lintRunner =
         new LintRunner(
             lintRegister,
-            "./src/test/resources/test-4.json");
+            "./src/test/resources/test-5.json");
     lintRunner.lint();
 
     Map<LintRule, Map<JSONFile, List<Error>>> lintOutput = lintRunner.getLintOutput();
@@ -263,12 +264,22 @@ public class LintRunnerShould {
 
     List<String> exitingPaths = new ArrayList<>();
     lintOutput.get(lintRule).values().forEach(k -> k.forEach(k1 -> exitingPaths.add(k1.getPath())));
-    assert(exitingPaths.size() == 2);
+    assert(exitingPaths.size() == 13);
 
-    //TODO: Fix this
     List<String> validPaths = Arrays.asList(
-        "test_3_label",
-        "test_3_label.test_3_1_label");
+        "",
+        "test_3_label.0",
+        "test_3_label.0.test_3_1_label.0",
+        "test_3_label.0.test_3_1_label.0.test_3_1_1_label",
+        "test_3_label.0.test_3_1_label.1",
+        "test_3_label.0.test_3_1_label.1.test_3_1_2_label",
+        "test_3_label.1",
+        "test_3_label.1.test_3_2_label",
+        "test_3_label.2",
+        "test_3_label.2.test_4_1_label.0",
+        "test_3_label.2.test_4_1_label.0.test_4_1_1_label",
+        "test_3_label.2.test_4_1_label.1",
+        "test_3_label.2.test_4_1_label.1.test_4_1_2_label");
     assert(exitingPaths.containsAll(validPaths));
   }
 }

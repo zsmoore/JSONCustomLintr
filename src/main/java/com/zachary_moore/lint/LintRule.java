@@ -1,8 +1,10 @@
 package com.zachary_moore.lint;
 
 import com.zachary_moore.filters.FilterMapper;
+import com.zachary_moore.objects.JSONArray;
 import com.zachary_moore.objects.JSONFile;
 
+import com.zachary_moore.objects.JSONObject;
 import com.zachary_moore.objects.WrappedObject;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,7 +56,6 @@ public class LintRule {
             for (WrappedObject element : filteredList) {
                 if (implementation.shouldReport(element)) {
                     String path = getPath(element);
-
                     if (!reportMessages.containsKey(file)) {
                         reportMessages.put(file, new ArrayList<>());
                     }
@@ -67,17 +68,23 @@ public class LintRule {
     }
 
     private String getPath(WrappedObject element) {
-        if (StringUtils.isBlank(element.getOriginatingKey()))
+        if (element.getParentObject() == null)
             return "";
 
-        if (element.getParentObject() == null || StringUtils.isBlank(element.getParentObject().getOriginatingKey()))
-            return element.getOriginatingKey();
+        if (element.getParentObject() instanceof JSONArray) {
+            return String.join(".", getPath(element.getParentObject()), getArrayIndex(element) +  "");
 
-        String parentPath = getPath(element.getParentObject());
+        }
 
-        if (StringUtils.isBlank(parentPath))
-            return element.getOriginatingKey();
-        return parentPath + "." + element.getOriginatingKey();
+        String path = getPath(element.getParentObject());
+        if (StringUtils.isNotBlank(path))
+            path += ".";
+
+        return path + element.getOriginatingKey();
+    }
+
+    private int getArrayIndex(WrappedObject element) {
+        return ((JSONArray)element.getParentObject()).toList().indexOf(element);
     }
 
     public LintLevel getLevel() {
