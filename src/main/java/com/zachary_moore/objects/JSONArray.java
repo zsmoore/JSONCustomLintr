@@ -1,5 +1,6 @@
 package com.zachary_moore.objects;
 
+import lombok.Getter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,7 +10,10 @@ import java.util.stream.StreamSupport;
 
 public class JSONArray extends org.json.JSONArray implements WrappedObject {
 
+    @Getter
     private final String originatingKey;
+
+    @Getter
     private final WrappedObject parentObject;
 
     private List<Object> contents;
@@ -24,16 +28,6 @@ public class JSONArray extends org.json.JSONArray implements WrappedObject {
             this.originatingKey = originatingKey;
         }
         this.parentObject = parentObject;
-    }
-
-    @Override
-    public String getOriginatingKey() {
-        return originatingKey;
-    }
-
-    @Override
-    public WrappedObject getParentObject() {
-        return parentObject;
     }
 
     @Override

@@ -83,10 +83,10 @@ class Example {
         };
 
         // Use builder to create rule
-        LintRule rule = new LintRule.Builder()
-        .setLevel(LintLevel.ERROR)
-        .setImplementation(lintImplementation)
-        .setIssueId("STRING_VALUE_NAMED_TEST")
+        LintRule rule = LintRule.builder()
+        .level(LintLevel.ERROR)
+        .implementation(lintImplementation)
+        .issueId("STRING_VALUE_NAMED_TEST")
         .build();        
 
         // Create register and register rule
@@ -113,7 +113,7 @@ The classes are:
   
 `LintImplementation<T>`  - Target `WrappedObject` implementing class type, determine rules for failure, configure output  
 &darr;  
-`LintRule.Builder` &rarr; `LintRule` - Configure severity, set issue ID, explanation, description, and implementation.  
+`LintRule.builder()` &rarr; `LintRule` - Configure severity, set issue ID, explanation, description, and implementation.  
 &darr;  
 `LintRegister` - Register all `LintRule`s  
 &darr;  
@@ -228,7 +228,7 @@ A `LintRule` can have the following properties set through the builder:
 * `String issueDescription` - Short description of this lint rule.
 * `String issueExplanation` - More in-depth description of lint rule.
 
-*Note:* If the required fields are not set when `LintRule.Builder.build()` is called a `LintRuleBuilderException` will be thrown.
+*Note:* If the required fields are not set when `LintRule.builder().build()` is called a `NullPointerException` will be thrown.
   
 ## LintRegister
 `LintRegister` is a simple class to register as many or as few `LintRule`s as wanted.  
@@ -331,10 +331,10 @@ class Example {
             }
         };
 
-        LintRule rule = new LintRule.Builder()
-                .setLevel(LintLevel.ERROR)
-                .setImplementation(lintImplementation)
-                .setIssueId("BOOLEAN_NAME_STARTS_WITH_HAS")
+        LintRule rule = LintRule.builder()
+                .level(LintLevel.ERROR)
+                .implementation(lintImplementation)
+                .issueId("BOOLEAN_NAME_STARTS_WITH_HAS")
                 .build();
 
         LintRegister register = new LintRegister();

@@ -1,13 +1,20 @@
 package com.zachary_moore.objects;
 
+import lombok.Getter;
+
+
 /**
  * Object to implement {@link WrappedObject} and encapsulate any non {@link org.json.JSONArray} or {@link org.json.JSONObject}
  * @param <T> Type of original Object this class was created from
  */
 public class WrappedPrimitive<T> implements WrappedObject {
 
+    @Getter
     private final String originatingKey;
+
+    @Getter
     private final WrappedObject parentObject;
+
     private final T value;
 
     protected WrappedPrimitive(String originatingKey,
@@ -33,16 +40,6 @@ public class WrappedPrimitive<T> implements WrappedObject {
         } else {
             return this.getValue().equals(other);
         }
-    }
-
-    @Override
-    public String getOriginatingKey() {
-        return originatingKey;
-    }
-
-    @Override
-    public WrappedObject getParentObject() {
-        return parentObject;
     }
 
     @Override

@@ -7,29 +7,38 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
 
 /**
  * Class to represent a lint rule configuration
  */
+@Builder
+@RequiredArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class LintRule {
 
+    @Getter
+    @NonNull
     private final LintLevel level;
-    private final LintImplementation implementation;
-    private final String issueId;
-    private final String issueDescription;
-    private final String issueExplanation;
 
-    private LintRule(LintLevel level,
-                     LintImplementation implementation,
-                     String issueId,
-                     String issueDescription,
-                     String issueExplanation) {
-        this.level = level;
-        this.implementation = implementation;
-        this.issueId = issueId;
-        this.issueDescription = issueDescription;
-        this.issueExplanation = issueExplanation;
-    }
+    @NonNull
+    private final LintImplementation implementation;
+
+    @Getter
+    @NonNull
+    @EqualsAndHashCode.Include
+    private final String issueId;
+
+    @Getter
+    private final String issueDescription;
+
+    @Getter
+    private final String issueExplanation;
 
     /**
      * Given a list of files lint each file based on setup config
@@ -58,88 +67,5 @@ public class LintRule {
         }
 
         return reportMessages;
-    }
-
-    public LintLevel getLevel() {
-        return level;
-    }
-
-    public String getIssueId() {
-        return issueId;
-    }
-
-    public String getIssueDescription() {
-        return issueDescription;
-    }
-
-    public String getIssueExplanation() {
-        return issueExplanation;
-    }
-
-    @Override
-    public int hashCode() {
-        return this.issueId.hashCode();
-    }
-
-    /**
-     * Builder pattern class for building our {@link LintRule}
-     */
-    public static class Builder {
-
-        private LintLevel level;
-        private LintImplementation implementation;
-        private String issueId;
-        private String issueDescription;
-        private String issueExplanation;
-
-        public Builder setLevel(LintLevel level) {
-            this.level = level;
-            return this;
-        }
-
-        public Builder setImplementation(LintImplementation implementation) {
-            this.implementation = implementation;
-            return this;
-        }
-
-        public Builder setIssueId(String issueId) {
-            this.issueId = issueId;
-            return this;
-        }
-
-        public Builder setIssueDescription(String issueDescription) {
-            this.issueDescription = issueDescription;
-            return this;
-        }
-
-        public Builder setIssueExplanation(String issueExplanation) {
-            this.issueExplanation = issueExplanation;
-            return this;
-        }
-
-        /**
-         * Builds a {@link LintRule}
-         * @return new {@link LintRule}
-         * @throws LintRuleBuilderException if either {@link LintLevel}, IssueID, or {@link LintImplementation} is not set
-         */
-        public LintRule build() throws LintRuleBuilderException {
-            if (level == null
-                    || implementation == null
-                    || issueId == null) {
-                throw  new LintRuleBuilderException("Must set LintLevel, LintImplementation and IssueId in a lint rule");
-            }
-
-            return new LintRule(level,
-                                implementation,
-                                issueId,
-                                issueDescription,
-                                issueExplanation);
-        }
-
-        public static class LintRuleBuilderException extends Exception {
-            private LintRuleBuilderException(String errorMessage) {
-                super(errorMessage);
-            }
-        }
     }
 }

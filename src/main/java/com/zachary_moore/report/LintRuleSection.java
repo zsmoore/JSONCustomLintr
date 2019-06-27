@@ -7,18 +7,16 @@ import com.zachary_moore.objects.JSONFile;
 
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 
 import static j2html.TagCreator.*;
 
 class LintRuleSection {
 
-    private final FileSection fileSection;
-
-    LintRuleSection() {
-        this.fileSection = new FileSection();
-    }
+    private final FileSection fileSection = new FileSection();
 
     Tag getLintRuleSection(Map.Entry<LintRule, Map<JSONFile, List<String>>> lintRuleMapEntry) {
+
         int numTotalIssues = 0;
         for (Map.Entry<JSONFile, List<String>> entry : lintRuleMapEntry.getValue().entrySet()) {
             numTotalIssues += entry.getValue().size();
@@ -39,5 +37,4 @@ class LintRuleSection {
                 ).withClasses("container-fluid")
         ).withClasses("container-fluid", lintRuleMapEntry.getKey().getLevel() == LintLevel.ERROR ? "bg-danger" : "bg-warning");
     }
-
 }

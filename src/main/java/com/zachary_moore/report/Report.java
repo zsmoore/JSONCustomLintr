@@ -6,20 +6,15 @@ import com.zachary_moore.objects.JSONFile;
 
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 
 import static j2html.TagCreator.*;
 
 public class Report {
 
-    private final ReportSummary reportSummary;
-    private final LintRuleSection lintRuleSection;
-    private final FooterSection footerSection;
-
-    public Report() {
-        this.reportSummary = new ReportSummary();
-        this.lintRuleSection = new LintRuleSection();
-        this.footerSection = new FooterSection();
-    }
+    private final ReportSummary reportSummary = new ReportSummary();
+    private final LintRuleSection lintRuleSection = new LintRuleSection();
+    private final FooterSection footerSection = new FooterSection();
 
     /**
      * Generate html report of input lint results

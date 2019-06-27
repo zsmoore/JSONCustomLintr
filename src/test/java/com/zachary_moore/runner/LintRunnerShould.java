@@ -15,15 +15,15 @@ import org.junit.jupiter.api.Test;
 public class LintRunnerShould {
 
     private LintRunner lintRunner;
-    private LintRule.Builder builder;
+    private LintRule.LintRuleBuilder builder;
     private LintRegister lintRegister;
 
     @BeforeEach
     public void setUp() {
         this.lintRunner = new LintRunner(new LintRegister(),
                                          "./src/test/resources");
-        this.builder = new LintRule.Builder()
-            .setImplementation(new LintImplementation<WrappedPrimitive<String>>() {
+        this.builder = LintRule.builder()
+            .implementation(new LintImplementation<WrappedPrimitive<String>>() {
                     @Override
                     public Class<?> getClazz() {
                         return String.class;
@@ -35,7 +35,8 @@ public class LintRunnerShould {
                         return true;
                     }
                 })
-            .setIssueId("");
+            .issueId("")
+        ;
         this.lintRegister = new LintRegister();
     }
 
@@ -53,7 +54,7 @@ public class LintRunnerShould {
 
     @Test
     public void lintRunnerShouldGiveExitStatus1() throws Exception {
-        this.lintRegister.register(builder.setLevel(LintLevel.ERROR).build());
+        this.lintRegister.register(builder.level(LintLevel.ERROR).build());
         LintRunner lintRunner = new LintRunner(this.lintRegister, "./src/test/resources");
         lintRunner.lint();
         assert(lintRunner.analyzeLintAndGiveExitCode() == 1);
@@ -61,7 +62,7 @@ public class LintRunnerShould {
 
     @Test
     public void lintRunnerShouldGiveExitStatus0WithWarning() throws Exception {
-        lintRegister.register(builder.setLevel(LintLevel.WARNING).build());
+        lintRegister.register(builder.level(LintLevel.WARNING).build());
         LintRunner lintRunner = new LintRunner(lintRegister, "./src/test/resources");
         lintRunner.lint();
         assert(lintRunner.analyzeLintAndGiveExitCode() == 0);
@@ -69,7 +70,7 @@ public class LintRunnerShould {
 
     @Test
     public void lintRunnerShouldGiveExitStatus0WithIgnore() throws Exception {
-       this.lintRegister.register(builder.setLevel(LintLevel.IGNORE).build());
+       this.lintRegister.register(builder.level(LintLevel.IGNORE).build());
         LintRunner lintRunner = new LintRunner(this.lintRegister, "./src/test/resources");
         lintRunner.lint();
         assert(lintRunner.analyzeLintAndGiveExitCode() == 0);
@@ -77,7 +78,7 @@ public class LintRunnerShould {
 
     @Test
     public void lintRunnerShouldTakeMultipleFiles() throws Exception {
-        LintRule lintRule = builder.setLevel(LintLevel.ERROR).build();
+        LintRule lintRule = builder.level(LintLevel.ERROR).build();
         this.lintRegister.register(lintRule);
         LintRunner lintRunner =
                 new LintRunner(

@@ -1,5 +1,7 @@
 package com.zachary_moore.objects;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.json.JSONException;
 import org.json.JSONTokener;
 
@@ -8,10 +10,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class JSONFile {
 
     private org.json.JSONObject jsonObject;
     private org.json.JSONArray jsonArray;
+
+    @Getter
+    @EqualsAndHashCode.Include
     private String filePath;
 
     public JSONFile(File file) throws IOException {
@@ -38,14 +44,5 @@ public class JSONFile {
         } else {
             throw new RuntimeException("Could not parse either a JSONArray or JSONObject from file");
         }
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    @Override
-    public int hashCode() {
-        return this.filePath.hashCode();
     }
 }

@@ -18,10 +18,10 @@ public class LintRegisterShould {
 
     @Test
     public void addOneLintRule() throws Exception {
-        this.lintRegister.register(new LintRule.Builder()
-                .setImplementation(mock(LintImplementation.class))
-                .setIssueId("")
-                .setLevel(LintLevel.IGNORE)
+        this.lintRegister.register(LintRule.builder()
+                .implementation(mock(LintImplementation.class))
+                .issueId("")
+                .level(LintLevel.IGNORE)
                 .build());
         assert(lintRegister.getLintRules().size() == 1);
         assert(lintRegister.getLintRules().get(0).getIssueId().equals(""));
@@ -29,15 +29,15 @@ public class LintRegisterShould {
 
     @Test
     public void addMultipleLintRules() throws Exception {
-        this.lintRegister.register(new LintRule.Builder()
-                .setImplementation(mock(LintImplementation.class))
-                .setIssueId("")
-                .setLevel(LintLevel.IGNORE)
+        this.lintRegister.register(LintRule.builder()
+                .implementation(mock(LintImplementation.class))
+                .issueId("")
+                .level(LintLevel.IGNORE)
                 .build(),
-                new LintRule.Builder()
-                    .setImplementation(mock(LintImplementation.class))
-                    .setIssueId("")
-                    .setLevel(LintLevel.IGNORE)
+                LintRule.builder()
+                    .implementation(mock(LintImplementation.class))
+                    .issueId("")
+                    .level(LintLevel.IGNORE)
                     .build());
         assert(lintRegister.getLintRules().size() == 2);
         assert(lintRegister.getLintRules().get(0).getIssueId().equals(""));
